@@ -1,6 +1,7 @@
 import pyodbc
 import requests
 
+print("Hi")
 class user():
     ...
     
