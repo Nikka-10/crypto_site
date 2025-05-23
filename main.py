@@ -1,4 +1,5 @@
 import pyodbc
+import bcrypt
 import requests
 
 
@@ -21,11 +22,14 @@ class User():
     def __init__(self, connection_str):
         self.connection_str = connection_str
 
-    
     def add_user(self, Firstname, Lastname, email, password):
+        salt = bcrypt.gensalt()
+        b_password = password.encode('utf-8')
+        hashed_password = bcrypt.hashpw(b_password, salt)
+        
         with pyodbc.connect(self.connection_str) as conn:
             cursor = conn.cursor()
-            cursor.execute(f"insert into user_info(fname, lname, email, password_) values(?,?,?,?)", (Firstname, Lastname, email, password))
+            cursor.execute(f"insert into user_info(fname, lname, email, password_) values(?,?,?,?)", (Firstname, Lastname, email, hashed_password))
             
             cursor.close()
      
@@ -99,6 +103,7 @@ def get_user_info():
     
     return fname, lname, email, password    
     
+   
     
 if __name__ == "__main__":
     main()

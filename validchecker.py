@@ -21,7 +21,11 @@ def check_mail(mail):
 def chech_password(password):
     if len(password) < 8:
         return "password must contain at least 8 symbols"
-    if password.isalnum():
+    if password.islower():
+        return "password must contain uppercase letters"
+    if password.isupper():
+            return "password must contain lowercase letters"
+    if password.isnumeric():
         return "password must contain letters"
     if password.isalpha():
         return "password must contain numeric characters"
