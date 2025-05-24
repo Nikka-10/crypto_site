@@ -1,9 +1,9 @@
 import pyodbc
-import requests
+import bcrypt
+import hashing_password
 
 
-class database():
-    
+class database(): 
     def __init__(self, server = 'NIKA', database = 'crypto_db'):
         self.connection_str = f"""
             driver={{ODBC driver 18 for SQL Server}};
@@ -17,19 +17,39 @@ class database():
         return self.connection_str
 
 
-class User():
+class sign_up():
     def __init__(self, connection_str):
         self.connection_str = connection_str
 
-    
+    def get_user_info():
+        fname = input("wirte your first name: ")    
+        lname = input("wirte your last name: ")    
+        email = input("wirte your email address: ")    
+        password = input("wirte password: ")
+        
+        return fname, lname, email, password
+        
     def add_user(self, Firstname, Lastname, email, password):
+        salt = bcrypt.gensalt()
+        b_password = password.encode('utf-8')
+        hashed_password = bcrypt.hashpw(b_password, salt)
+        
         with pyodbc.connect(self.connection_str) as conn:
             cursor = conn.cursor()
-            cursor.execute(f"insert into user_info(fname, lname, email, password_) values(?,?,?,?)", (Firstname, Lastname, email, password))
+            cursor.execute(f"insert into user_info(fname, lname, email, password_) values(?,?,?,?)", (Firstname, Lastname, email, hashed_password))
             
             cursor.close()
-     
-       
+            
+            
+class sign_in():
+    def __init__(self, login, password):
+        self.login = login
+        self.password = password
+        
+    def check():
+        ...
+
+    
 class Valid_Checker():
     def __init__(self, mail, password):
         self.mail = mail
@@ -54,51 +74,21 @@ class Valid_Checker():
         
         return True
     
-
-class crypto_operatinos():
-    def __init__(self, connection):
-        self.connection = connection
-         
-    def Get_crypto(self,):
-        ...
-    
-    def buy_crypto(self,):
-        ...
-        
-    def sell_crypto(self,):
-        ...
-        
-    def check_wallet(self,):
-        ...
-        
-  
-     
 def main():
+    print("welcome to our crypto market!")
+    answer = input(" 1. sign in \n 2. sign up \n ")
+    
+    if answer == '1':
+        pass
+    elif answer == '2':
+       fname, lname, email, password =  sign_up.get_user_info()
+    
     db = database()
     connection_str = db.get_connection()
     
-    user = User(connection_str)
-    crupto_op = crypto_operatinos(connection_str)
+    signup = sign_up(connection_str)
+    adduser = signup.add_user(fname, lname, email, password)
     
-    fname, lname, email, password = get_user_info()
-    valid_checker = Valid_Checker(email, password)
-    
-    if valid_checker.check_mail() != True:
-        print(valid_checker.check_mail())
-    elif valid_checker.check_password() != True:
-        print(valid_checker.check_password())
-    else:
-        user.add_user(fname, lname, email, password)
-  
-    
-def get_user_info():
-    fname = input("wirte your first name: ")    
-    lname = input("wirte your last name: ")    
-    email = input("wirte your email address: ")    
-    password = input("wirte password: ")
-    
-    return fname, lname, email, password    
-    
-    
+     
 if __name__ == "__main__":
     main()
