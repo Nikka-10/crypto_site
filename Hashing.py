@@ -1,8 +1,8 @@
 import bcrypt
 
-class Hashing():
+class Hashing_password():
     def __init__(self, password):
-          self.password = password
+        self.password = password
     
     def hashing_scrypt(self):
         salt = bcrypt.gensalt()
@@ -17,7 +17,7 @@ class Hashing():
 
 
 def main():
-    hashing = Hashing()
+    ...
     
 
 if __name__ == "__main__":
