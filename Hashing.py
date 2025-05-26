@@ -24,9 +24,7 @@ class check_password():
             cursor = conn.cursor()
             cursor.execute("select password_ from user_info where email = ?",(self.email,))
             row = cursor.fetchone()
-            
             saved_password = row[0].encode('utf-8')
-            print(saved_password)
             
             if bcrypt.checkpw(self.entered_password, saved_password):
                 return True

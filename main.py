@@ -1,5 +1,4 @@
 import pyodbc
-import bcrypt
 import Hashing
 import ValidChecker
 
@@ -31,19 +30,21 @@ class sign_up():
     def check(self):
         try: 
             if ValidChecker.check_mail(self.email) == True and  ValidChecker.check_password(self.password) == True:
-                print("you successfully signed up")
-        except ValueError:
-            print(ValueError)
+                return True
+        except ValueError as problem:
+            print(problem)
         
     def add_user(self):        
         hashing = Hashing.Hashing_password(self.password)
         self.hashed_password = hashing.hashing_scrypt()
-        
-        with pyodbc.connect(self.connection_str) as conn:
-            cursor = conn.cursor()
-            cursor.execute(f"insert into user_info(fname, lname, email, password_) values(?,?,?,?)", (self.fname, self.lname, self.email, self.hashed_password))
-            
-            cursor.close()
+        try:
+            with pyodbc.connect(self.connection_str) as conn:
+                cursor = conn.cursor()
+                cursor.execute(f"insert into user_info(fname, lname, email, password_) values(?,?,?,?)", (self.fname, self.lname, self.email, self.hashed_password))
+                
+                return True
+        except pyodbc.IntegrityError:
+            print("account with this email is already exist")
             
             
 class sign_in():
@@ -57,9 +58,7 @@ class sign_in():
     def check(self):
         checkpassword  = Hashing.check_password(self.connection_str ,self.email, self.password)
         if checkpassword.check_hash_password() == True:
-            print("you successfully signed in")
-        else:
-            print("login or password is incorrect")
+            return True
         
   
 class crypto_operations():
@@ -76,13 +75,24 @@ def main():
     answer = input(" 1. sign in \n 2. sign up \n ")
     
     if answer == '1':
-        signin.get_user_info()
-        signin.check()
-        
+        while True:
+            signin.get_user_info()
+            
+            if signin.check() == True:
+                print("you successfully signed in")
+                break
+            else:
+                print("login or password is incorrect")
+                
     elif answer == '2':
-       signup.get_user_info()
-       signup.check()
-       signup.add_user()
+        while True:
+            signup.get_user_info()
+            if signup.check() !=  True:
+                continue
+            if signup.add_user() == True: 
+                print("you successfully signed up")
+                break
+            
        
   
      
