@@ -22,10 +22,9 @@ class sign_up():
     def __init__(self, connection_str):
         self.connection_str = connection_str
 
-
     def get_user_info(self):
         self.fname = input("wirte your first name: ")    
-        self.lname = input("wirte your last name: ")    
+        self.lname = input("wirte your last name: ")     
         self.email = input("wirte your email address: ")    
         self.password = input("wirte password: ")
     
@@ -48,13 +47,20 @@ class sign_up():
             
             
 class sign_in():
-    def __init__(self, login, password):
-        self.login = login
-        self.password = password
+    def __init__(self, connection_str):
+        self.connection_str = connection_str
         
-    def check():
-        ...
+    def get_user_info(self):
+        self.email = input("enter user email: ")
+        self.password = input("enter user password: ")
   
+    def check(self):
+        checkpassword  = Hashing.check_password(self.connection_str ,self.email, self.password)
+        if checkpassword.check_hash_password() == True:
+            print("you successfully signed in")
+        else:
+            print("login or password is incorrect")
+        
   
 class crypto_operations():
     ...
@@ -64,12 +70,15 @@ def main():
     db = database()
     connection_str = db.get_connection()
     signup = sign_up(connection_str)
+    signin  = sign_in(connection_str)
     
     print("welcome to our crypto market!")
     answer = input(" 1. sign in \n 2. sign up \n ")
     
     if answer == '1':
-        pass
+        signin.get_user_info()
+        signin.check()
+        
     elif answer == '2':
        signup.get_user_info()
        signup.check()
