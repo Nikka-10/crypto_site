@@ -55,3 +55,6 @@ while True:
         time.sleep(20)
     elif action == 'q':
         break
+    else:
+        print("Invalid action. Please enter 'p' to purchase crypto or 'w' to wait for next update.")
+        action = input("\nDo you want to [p]urchase crypto or [w]ait for next update? (p/w) (q to quit): ").strip().lower()
