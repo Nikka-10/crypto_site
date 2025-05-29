@@ -47,9 +47,11 @@ crypto_list = [coin.strip().lower() for coin in crypto_input.split(",")]
 
 while True:
     priceAPIcall(crypto_list, vs_currency)
-    action = input("\nDo you want to [p]urchase crypto or [w]ait for next update? (p/w): ").strip().lower()
+    action = input("\nDo you want to [p]urchase crypto or [w]ait for next update? (p/w) (q to quit): ").strip().lower()
     if action == 'p':
         purchaseCrypto(vs_currency)
-    else:
+    elif action == 'w':
         print("Waiting 20 seconds for next update...\n")
         time.sleep(20)
+    elif action == 'q':
+        break
