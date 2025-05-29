@@ -28,8 +28,7 @@ class check_password():
             
             if bcrypt.checkpw(self.entered_password, saved_password):
                 return True
-            else:
-                return False
+            return False
             
 
 
