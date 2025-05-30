@@ -1,6 +1,7 @@
 import pyodbc
 import Hashing
 import ValidChecker
+import getapi_2
 
 
 class database(): 
@@ -62,8 +63,23 @@ class sign_in():
         
   
 class crypto_operations():
-    ...
+    def __init__(self, crypto_currency):
+        self.crypto_currency = crypto_currency
+        self.getapi = getapi_2.API_requests(self.crypto_currency)
+    
+    def show_price(self):
+        self.price = self.getapi.priceAPIcall()
+        return self.price 
+        
+    def buy_crypto(self):
+        ...
+        
+    def sell_crypto(self):
+        ...
   
+    def convert(self):
+        ...
+    
     
 def main():
     db = database()
@@ -85,13 +101,28 @@ def main():
                 print("login or password is incorrect")
                 
     elif answer == '2':
-        while True:
-            signup.get_user_info()
-            if signup.check() !=  True:
-                continue
-            if signup.add_user() == True: 
-                print("you successfully signed up")
-                break
+        
+        crypto = input("what cryptocurrency are you interested in? ")
+        crypto_list = [coin.strip().lower() for coin in crypto.split(",")]
+        action = input(" 1.show price \n 2.buy \n 3.sell \n 4.convert \n")
+        crypto_operation = crypto_operations(crypto_list)
+        if action == 1:
+            print(crypto_operation.show_price())
+        elif action == 2:
+            pass
+        elif action == 3:
+            pass
+        elif action == 4:
+            pass
+        
+       # while True:
+       #     signup.get_user_info()
+       #     if signup.check() !=  True:
+       #         continue
+       #     if signup.add_user() == True: 
+       #         print("you successfully signed up")
+       #         break
+            
             
        
   

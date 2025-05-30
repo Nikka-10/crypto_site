@@ -1,8 +1,9 @@
 import requests
 import time
+#import PyCurrency_Converter
 
 class API_requests():
-    def __init__(self, crypto_list, vs_currency):
+    def __init__(self, crypto_list, vs_currency = 'usd'):
         self.crypto_list = crypto_list
         self.vs_currency = vs_currency
         
@@ -16,7 +17,6 @@ class API_requests():
         self.response = requests.get(url, params=params, headers=headers)
     
     def priceAPIcall(self):
-
         if self.response.status_code != 200:
             print('Failed to retrieve data from the API:', self.response.status_code)
             return
@@ -41,6 +41,20 @@ class API_requests():
             print(f"You can purchase {quantity:.6f} {crypto_name.title()} for ${amount}")
         except ValueError:
             print("Invalid amount. Please enter a number.")
+    
+
+#class convert():
+#    def __init__(self, crypto_amount, currency):
+#        self.crypto_amount = crypto_amount
+#        self.currency = currency
+#        
+#    def convert_price(self):
+#        converted_price = PyCurrency_Converter.convert(self.crypto_amount, 'USD', self.currency)
+#        return converted_price
+#    
+#    def convert_crypto(self, new_crypto):
+#        ...
+        
     
     
     
