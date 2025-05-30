@@ -59,11 +59,21 @@ class sign_in():
     def check(self):
         checkpassword  = Hashing.check_password(self.connection_str ,self.email, self.password)
         if checkpassword.check_hash_password() == True:
-            return True
+            
+            with pyodbc.connect(self.connection_str) as conn:
+                cursor = conn.cursor()
+                cursor.execute("SELECT user_id FROM user_info WHERE email = ?", (self.email,))
+                result = cursor.fetchone()
+                return result[0]
+            
+        else:
+            raise ValueError
         
   
 class crypto_operations():
-    def __init__(self, crypto_currency):
+    def __init__(self, connection_str, user_id, crypto_currency):
+        self.connection_str = connection_str
+        self.user_id = user_id
         self.crypto_currency = crypto_currency
         self.getapi = getapi_2.API_requests(self.crypto_currency)
     
@@ -72,7 +82,11 @@ class crypto_operations():
         return self.price 
         
     def buy_crypto(self):
-        ...
+        with pyodbc.connect(self.connection_str) as conn:
+                cursor = conn.cursor()
+                cursor.execute("")
+                result = cursor.fetchone()
+            
         
     def sell_crypto(self):
         ...
@@ -90,38 +104,40 @@ def main():
     print("welcome to our crypto market!")
     answer = input(" 1. sign in \n 2. sign up \n ")
     
-    if answer == '1':
+    if answer == '1':   
         while True:
             signin.get_user_info()
             
             if signin.check() == True:
                 print("you successfully signed in")
-                break
+                user_id = signin.check()
             else:
                 print("login or password is incorrect")
-                
-    elif answer == '2':
+                break
         
         crypto = input("what cryptocurrency are you interested in? ")
         crypto_list = [coin.strip().lower() for coin in crypto.split(",")]
         action = input(" 1.show price \n 2.buy \n 3.sell \n 4.convert \n")
-        crypto_operation = crypto_operations(crypto_list)
+        crypto_operation = crypto_operations(connection_str, user_id, crypto_list)
         if action == 1:
             print(crypto_operation.show_price())
         elif action == 2:
-            pass
+            crypto_operation.buy_crypto()
         elif action == 3:
-            pass
+            crypto_operation.sell_crypto()
         elif action == 4:
-            pass
+            crypto_operation.convert()
+                
+    elif answer == '2':
+         while True:
+             signup.get_user_info()
+             if signup.check() !=  True:
+                 continue
+             if signup.add_user() == True: 
+                 print("you successfully signed up")
+                 break
         
-       # while True:
-       #     signup.get_user_info()
-       #     if signup.check() !=  True:
-       #         continue
-       #     if signup.add_user() == True: 
-       #         print("you successfully signed up")
-       #         break
+            
             
             
        
