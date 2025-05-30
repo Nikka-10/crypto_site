@@ -45,16 +45,31 @@ vs_currency = input("Enter the currency you want to check in: ")
 
 crypto_list = [coin.strip().lower() for coin in crypto_input.split(",")]
 
+def convertCrypto(crypto_list, vs_currency):
+    first_cryptoValue = input("Enter first which you want to exchange: ")
+    second_cryptoValue = input("Enter second which you want to exchange it to: ")
+    
+    if first_cryptoValue in crypto_list and second_cryptoValue in crypto_list:
+        try:
+            crypto_amount = int(input("Enter how much you want to exchange: "))
+            first_price = latest_prices[first_cryptoValue][vs_currency.lower()]
+            second_price = latest_prices[second_cryptoValue][vs_currency.lower()]
+            converted_amount = (crypto_amount * first_price) / second_price
+            print(f"{crypto_amount} of {first_cryptoValue} has been exchanged to {converted_amount} {second_cryptoValue} in {vs_currency}")
+        except ValueError:
+            print("Invalid amount. Please enter a valid number.")
 while True:
     priceAPIcall(crypto_list, vs_currency)
-    action = input("\nDo you want to [p]urchase crypto or [w]ait for next update? (p/w) (q to quit): ").strip().lower()
+    action = input("\nDo you want to [p]urchase crypto or [w]ait for next update or [e]xchange currencies? (p/w) (q to quit): ").strip().lower()
     if action == 'p':
         purchaseCrypto(vs_currency)
     elif action == 'w':
-        print("Waiting 20 seconds for next update...\n")
-        time.sleep(20)
+        print("Waiting 10 seconds for next update...\n")
+        time.sleep(10)
     elif action == 'q':
         break
+    elif action == 'e':
+        convertCrypto(crypto_list, vs_currency)
     else:
         print("Invalid action. Please enter 'p' to purchase crypto or 'w' to wait for next update.")
-        action = input("\nDo you want to [p]urchase crypto or [w]ait for next update? (p/w) (q to quit): ").strip().lower()
+        action = input("\nDo you want to [p]urchase crypto or [w]ait for next update? (p/w/e) (q to quit): ").strip().lower()
