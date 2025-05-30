@@ -18,15 +18,15 @@ class API_requests():
     
     def priceAPIcall(self):
         if self.response.status_code != 200:
-            print('Failed to retrieve data from the API:', self.response.status_code)
-            return
+            return 'Failed to retrieve data from the API:', self.response.status_code
+        
         self.latest_prices = self.response.json()
         for coin in self.crypto_list:
             if coin.lower() in self.latest_prices:
                 price = self.latest_prices[coin.lower()][self.vs_currency.lower()]
-                print(f'The price of {coin.title()} in {self.vs_currency.upper()} is ${price}')
+                return f'The price of {coin.title()} in {self.vs_currency.upper()} is ${price}'
             else:
-                print(f'{coin.title()} not found in API response.')
+                return f'{coin.title()} not found in API response.'
 
     def purchaseCrypto(self):
         crypto_name = input("Enter the name of the cryptocurrency you want to purchase: ").strip().lower()
