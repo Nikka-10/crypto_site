@@ -1,6 +1,6 @@
 import requests
 import time
-#import PyCurrency_Converter
+
 
 class API_requests():
     def __init__(self, crypto_list, vs_currency = 'usd'):
@@ -42,40 +42,25 @@ class API_requests():
         except ValueError:
             print("Invalid amount. Please enter a number.")
     
-
-#class convert():
-#    def __init__(self, crypto_amount, currency):
-#        self.crypto_amount = crypto_amount
-#        self.currency = currency
-#        
-#    def convert_price(self):
-#        converted_price = PyCurrency_Converter.convert(self.crypto_amount, 'USD', self.currency)
-#        return converted_price
-#    
-#    def convert_crypto(self, new_crypto):
-#        ...
+    def convertCrypto(self):
+        first_cryptoValue = input("Enter first which you want to exchange: ")
+        second_cryptoValue = input("Enter second which you want to exchange it to: ")
+        
+        if first_cryptoValue in self.crypto_list and second_cryptoValue in self.crypto_list:
+            try:
+                crypto_amount = int(input("Enter how much you want to exchange: "))
+                first_price = self.latest_prices[first_cryptoValue][self.vs_currency.lower()]
+                second_price = self.latest_prices[second_cryptoValue][self.vs_currency.lower()]
+                converted_amount = (crypto_amount * first_price) / second_price
+                print(f"{crypto_amount} of {first_cryptoValue} has been exchanged to {converted_amount} {second_cryptoValue} in {self.vs_currency}")
+            except ValueError:
+                print("Invalid amount. Please enter a valid number.")
         
     
     
     
 def main():
-    crypto_input = input("Enter the crypto currencies you want to check (comma-separated): ")
-    vs_currency = input("Enter the currency you want to check in: ")
-    crypto_list = [coin.strip().lower() for coin in crypto_input.split(",")]
-    
-    api_requests = API_requests(crypto_list, vs_currency)
-    
-    while True:
-        api_requests.priceAPIcall()
-        action = input("\nDo you want to [p]urchase crypto or [w]ait for next update? (p/w): ").strip().lower()
-        if action == 'p':
-            api_requests.purchaseCrypto()
-        elif action == 'w':
-            print("Waiting 20 seconds for next update...\n")
-            time.sleep(20)
-        else:
-            break
-
+    ...
 
     
 if __name__ == "__main__":

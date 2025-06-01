@@ -16,12 +16,26 @@ class database():
             
     def get_connection(self):    
         return self.connection_str
+    
+    def get_data(self, sql_code, sql_input):
+        with pyodbc.connect(self.connection_str) as conn:
+                cursor = conn.cursor()
+                cursor.execute(sql_code, sql_input)
+                result = cursor.fetchone()
+                return result[0]
+            
+    def add_data(self, sql_code, sql_input):
+        with pyodbc.connect(self.connection_str) as conn:
+                cursor = conn.cursor()
+                cursor.execute(sql_code, sql_input)
+                return True
 
 
 class sign_up():
-    def __init__(self, connection_str):
-        self.connection_str = connection_str
-
+    def __init__(self):
+        self.db = database()
+        
+        
     def get_user_info(self):
         self.fname = input("wirte your first name: ")    
         self.lname = input("wirte your last name: ")     
@@ -39,18 +53,16 @@ class sign_up():
         hashing = Hashing.Hashing_password(self.password)
         self.hashed_password = hashing.hashing_scrypt()
         try:
-            with pyodbc.connect(self.connection_str) as conn:
-                cursor = conn.cursor()
-                cursor.execute(f"insert into user_info(fname, lname, email, password_) values(?,?,?,?)", (self.fname, self.lname, self.email, self.hashed_password))
-                
-                return True
+            if_add = self.db.add_data("insert into user_info(fname, lname, email, password_) values(?,?,?,?)", (self.fname, self.lname, self.email, self.hashed_password))
+            return if_add
         except pyodbc.IntegrityError:
             print("account with this email is already exist")
             
             
 class sign_in():
-    def __init__(self, connection_str):
-        self.connection_str = connection_str
+    def __init__(self):
+        self.db = database()
+        self.connection_str = self.db.connection_str
         
     def get_user_info(self):
         self.email = input("enter user email: ")
@@ -59,20 +71,15 @@ class sign_in():
     def check(self):
         checkpassword  = Hashing.check_password(self.connection_str ,self.email, self.password)
         if checkpassword.check_hash_password() == True:
-            
-            with pyodbc.connect(self.connection_str) as conn:
-                cursor = conn.cursor()
-                cursor.execute("SELECT user_id FROM user_info WHERE email = ?", (self.email,))
-                result = cursor.fetchone()
-                return result[0]
-            
+            self.db.get_data("SELECT userid FROM user_info WHERE email = ?", (self.email,))
         else:
             raise ValueError
         
   
 class crypto_operations():
-    def __init__(self, connection_str, user_id, crypto_currency):
-        self.connection_str = connection_str
+    def __init__(self, user_id, crypto_currency):
+        self.db = database()
+        self.connection_str = self.db.connection_str
         self.user_id = user_id
         self.crypto_currency = crypto_currency
         self.getapi = getapi_2.API_requests(self.crypto_currency)
@@ -98,34 +105,35 @@ class crypto_operations():
 def main():
     db = database()
     connection_str = db.get_connection()
-    signup = sign_up(connection_str)
-    signin  = sign_in(connection_str)
+    signup = sign_up()
+    signin  = sign_in()
     
     print("welcome to our crypto market!")
     answer = input(" 1. sign in \n 2. sign up \n ")
     
     if answer == '1':   
         while True:
-            signin.get_user_info()
-            
-            if signin.check() == True:
-                print("you successfully signed in")
-                user_id = signin.check()
+            try:
+                signin.get_user_info()
+            except ValueError as error:
+                print(error)
             else:
-                print("login or password is incorrect")
+                user_id = signin.check()
+                print("you successfully signed in")
                 break
-        
+                
         crypto = input("what cryptocurrency are you interested in? ")
         crypto_list = [coin.strip().lower() for coin in crypto.split(",")]
         action = input(" 1.show price \n 2.buy \n 3.sell \n 4.convert \n")
-        crypto_operation = crypto_operations(connection_str, user_id, crypto_list)
-        if action == 1:
+        crypto_operation = crypto_operations(user_id, crypto_list)
+        
+        if action == '1':
             print(crypto_operation.show_price())
-        elif action == 2:
+        elif action == '2':
             crypto_operation.buy_crypto()
-        elif action == 3:
+        elif action == '3':
             crypto_operation.sell_crypto()
-        elif action == 4:
+        elif action == '4':
             crypto_operation.convert()
                 
     elif answer == '2':
