@@ -1,6 +1,7 @@
 import requests
 
 class API_requests():
+    
     def __init__(self, crypto_list, vs_currency = 'usd'):
         self.crypto_list = crypto_list
         self.vs_currency = vs_currency
@@ -13,12 +14,15 @@ class API_requests():
         headers = { 'x-cg-demo-api-key': 'CG-Um1wPk1y9NhixNZxRh5jb2vz' }
         
         self.response = requests.get(url, params=params, headers=headers)
+        if self.response.status_code == 200:
+            self.latest_prices = self.response.json()
+        else:
+            self.latest_prices = {}
     
     def priceAPIcall(self):
         if self.response.status_code != 200:
             return 'Failed to retrieve data from the API:', self.response.status_code
         
-        self.latest_prices = self.response.json()
         for coin in self.crypto_list:
             if coin.lower() in self.latest_prices:
                 price = self.latest_prices[coin.lower()][self.vs_currency.lower()]
@@ -26,17 +30,16 @@ class API_requests():
             else:
                 return f'{coin.title()} not found in API response.'
 
-    def purchaseCrypto(self):
-        crypto_name = input("Enter the name of the cryptocurrency you want to purchase: ").strip().lower()
+    def purchaseCrypto(self,coin,amount):
 
-        if crypto_name not in self.latest_prices:
-            print("Cryptocurrency not found in the latest price listing. Try after the next update.")
+        if coin not in self.latest_prices:
+            print(f"{coin.title()} not found in the latest price listing.")
             return
         try:
-            amount = float(input(f"Enter the amount in {self.vs_currency.upper()} you want to spend: "))
-            price = self.latest_prices[crypto_name][self.vs_currency.lower()]
+            price = self.latest_prices[coin][self.vs_currency]
             quantity = amount / price
-            print(f"You can purchase {quantity:.6f} {crypto_name.title()} for ${amount}")
+            print(f"You can purchase {quantity:.6f} {coin.title()} for ${amount}")
+            return quantity
         except ValueError:
             print("Invalid amount. Please enter a number.")
     

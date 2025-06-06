@@ -106,7 +106,27 @@ class Balance_Operations():
             print(f"Withdrawal successful. New balance: {new_balance}")
         except ValueError as error:
             print(error)
+            
+class operations_history():   #დასასრულებელი!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    def __init__(self, user_id):
+        self.db = database()
+        self.user_id = user_id
         
+    def add_operation(self, operation_type, amount, crypto_currency = None, price = None, timestramp=None):
+        try:
+            self.db.add_data("insert into crypto_operations(user_id, crypto_id, operation_type, amount, price_per_unit, total_value, timestamp) values(?,?,?,?,?,?,?)", 
+                             (self.user_id, operation_type, crypto_currency, amount, price))
+            print("Operation added successfully.")
+        except Exception as e:
+            print(f"Error adding operation: {e}")
+    
+    def show_history(self):
+        try:
+            history = self.db.get_data("select * from operations_history where userid = ?", (self.user_id,))
+            return history
+        except Exception as e:
+            print(f"Error retrieving history: {e}")
+                  
 
 class crypto_operations():
     def __init__(self, user_id, crypto_currency):
@@ -131,7 +151,19 @@ class crypto_operations():
         return self.price 
         
     def buy_crypto(self):
-        ...
+        print("Available cryptocurrencies:", ', '.join(self.crypto_currency))
+        coin = input("Which cryptocurrency do you want to buy? ").lower()
+        amount = float(input(f"Enter the amount you want to spend: "))
+        balance = self.db.get_data("select balance from user_info where userid = ?", (self.user_id,))
+        
+        if amount > balance:
+            raise ValueError("Insufficient balance.")
+        
+        quantity = self.getapi.purchaseCrypto(coin, amount)
+        
+        self.db.add_data("insert into crypto_name(name) values(?)",(coin,))
+        coin_id = self.db.get_data("select crypto_id from crypto_name where name = ?", (coin,))
+        self.db.add_data("insert into user_crypto(userid, crypto_id) values(?,?)", (self.user_id, coin_id))
             
     def sell_crypto(self):
         ...
@@ -159,27 +191,34 @@ def main():
                 break
             
         balance_operations = Balance_Operations(user_id)
-        action = input(" 1.add balance \n 2.withdraw balance \n")
+        action = input(" 1.add balance \n 2.withdraw balance \n 3.skip \n")
         if action == "1":
             balance_operations.insert_balance()
         elif action == "2":
             balance_operations.withdraw_balance()
-        
-            
-                
-        crypto = input("what cryptocurrency are you interested in? ")
-        crypto_list = [coin.strip().lower() for coin in crypto.split(",")]
-        action = input(" 1.show price \n 2.buy \n 3.sell \n 4.convert \n")
-        crypto_operation = crypto_operations(user_id, crypto_list)
-        
-        if action == "1":
-            print(crypto_operation.show_price())
-        elif action == "2":
-            crypto_operation.buy_crypto()
         elif action == "3":
-            crypto_operation.sell_crypto()
-        elif action == "4":
-            crypto_operation.convert()
+            pass
+        
+        while True:
+            crypto = input("what cryptocurrency are you interested in? ")
+            crypto_list = [coin.strip().lower() for coin in crypto.split(",")]
+            crypto_operation = crypto_operations(user_id, crypto_list)
+            action = input(" 1.show price \n 2.buy \n 3.sell \n 4.convert \n 5.exit \n")
+            
+            if action == "1":
+                print(crypto_operation.show_price())
+                continue
+            elif action == "2":
+                crypto_operation.buy_crypto()
+                continue
+            elif action == "3":
+                crypto_operation.sell_crypto()
+                continue
+            elif action == "4":
+                crypto_operation.convert()
+                continue
+            elif action == "5":
+                break
             
     elif answer == '2':
          while True:
