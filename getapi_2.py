@@ -1,6 +1,4 @@
 import requests
-import time
-
 
 class API_requests():
     def __init__(self, crypto_list, vs_currency = 'usd'):
@@ -55,10 +53,8 @@ class API_requests():
                 print(f"{crypto_amount} of {first_cryptoValue} has been exchanged to {converted_amount} {second_cryptoValue} in {self.vs_currency}")
             except ValueError:
                 print("Invalid amount. Please enter a valid number.")
-        
-    
-    
-    
+   
+      
 def main():
     ...
 

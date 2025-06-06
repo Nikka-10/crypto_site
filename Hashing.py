@@ -30,8 +30,7 @@ class check_password():
                 return True
             return False
             
-
-
+            
 def main():
     ...
     
