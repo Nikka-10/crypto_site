@@ -156,6 +156,8 @@ class crypto_operations():
         coin_id = self.db.get_data("select crypto_id from crypto_name where name = ?", (coin,))
         self.db.add_data("insert into user_crypto(userid, crypto_id) values(?,?)", (self.user_id, coin_id))
         new_balance = self.db.add_data("update user_info set balance = ? where userid = ?", (balance - amount, self.user_id))
+        
+        
             
     def sell_crypto(self):
         ...
