@@ -58,9 +58,3 @@ class API_requests():
                 print("Invalid amount. Please enter a valid number.")
    
       
-def main():
-    ...
-
-    
-if __name__ == "__main__":
-    main()

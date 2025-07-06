@@ -29,11 +29,3 @@ class check_password():
             if bcrypt.checkpw(self.entered_password, saved_password):
                 return True
             return False
-            
-            
-def main():
-    ...
-    
-
-if __name__ == "__main__":
-    main()
