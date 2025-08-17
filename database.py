@@ -10,17 +10,17 @@ class database():
             Trusted_Connection=yes;;
             """.strip()
             
-    def get_connection(self):    
+    def get_connection(self) -> str:    
         return self.connection_str
     
-    def get_data(self, sql_code, sql_input):
+    def get_data(self, sql_code, sql_input) -> str:
         with pyodbc.connect(self.connection_str) as conn:
                 cursor = conn.cursor()
                 cursor.execute(sql_code, sql_input)
                 result = cursor.fetchone()
                 return result[0]
             
-    def add_data(self, sql_code, sql_input):
+    def add_data(self, sql_code, sql_input) -> bool:
         with pyodbc.connect(self.connection_str) as conn:
                 cursor = conn.cursor()
                 cursor.execute(sql_code, sql_input)

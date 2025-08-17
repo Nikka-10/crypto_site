@@ -26,6 +26,4 @@ class check_password():
             row = cursor.fetchone()
             saved_password = row[0].encode('utf-8')
             
-            if bcrypt.checkpw(self.entered_password, saved_password):
-                return True
-            return False
+            return bcrypt.checkpw(self.entered_password, saved_password)

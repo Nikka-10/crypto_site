@@ -7,7 +7,6 @@ import Operations
 import history
 
 
-
 class sign_up():
     def __init__(self,fname, lname, email, password):
         self.db = database.database()
@@ -63,7 +62,6 @@ class sign_in():
         return cls(email, password)
             
 def main():
-    signin  = sign_in()
     
     print("welcome to our crypto market!")
     answer = input(" 1. sign in \n 2. sign up \n ")
@@ -71,7 +69,7 @@ def main():
     if answer == '1':   
         while True:
             try:
-                signin.get_user_info()
+                signin = sign_in.get_user_info()
             except ValueError as error:
                 print(error)
             else:
@@ -82,9 +80,13 @@ def main():
         balance_operations = Balance.Balance_Operations(user_id)
         action = input(" 1.add balance \n 2.withdraw balance \n 3.skip \n")
         if action == "1":
-            balance_operations.insert_balance()
+            insert_amount = float(input("enter your balance: "))
+            balance_operations.insert_money(insert_amount)
+            print("money added successfully.")
         elif action == "2":
-            balance_operations.withdraw_balance()
+            withdraw_amount = float(input("how much money you want to withdraw: "))
+            balance_operations.withdraw_money(withdraw_amount)
+            print("money withdrawed? idk how it write, successfully.")
         elif action == "3":
             pass
         

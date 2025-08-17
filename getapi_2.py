@@ -11,7 +11,8 @@ class API_requests():
             'ids': ','.join(crypto_list),
             'vs_currencies': vs_currency
         }
-        headers = { 'x-cg-demo-api-key': 'CG-Um1wPk1y9NhixNZxRh5jb2vz' }
+        headers = { 'x-cg-demo-api-key': 'CG-Um1wPk1y9NhixNZxRh5jb2vz',
+                   }
         
         self.response = requests.get(url, params=params, headers=headers)
         if self.response.status_code == 200:
@@ -31,7 +32,6 @@ class API_requests():
                 return f'{coin.title()} not found in API response.'
 
     def purchaseCrypto(self,coin,amount):
-
         if coin not in self.latest_prices:
             print(f"{coin.title()} not found in the latest price listing.")
             return
