@@ -37,7 +37,7 @@ class API_requests():
             return
         try:
             price = self.latest_prices[coin][self.vs_currency]
-            quantity = amount / price
+            quantity = float(amount) / float(price)
             print(f"You can purchase {quantity:.6f} {coin.title()} for ${amount}")
             return quantity
         except ValueError:
@@ -56,5 +56,3 @@ class API_requests():
                 print(f"{crypto_amount} of {first_cryptoValue} has been exchanged to {converted_amount} {second_cryptoValue} in {self.vs_currency}")
             except ValueError:
                 print("Invalid amount. Please enter a valid number.")
-   
-      

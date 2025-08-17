@@ -1,12 +1,14 @@
 import database
 
+
 class Balance_Operations():
     def __init__(self, user_id):
         self.db = database.database()
         self.connection_str = self.db.connection_str
         self.user_id = user_id
         
-    def insert_money(self, insert_amount):
+        
+    def insert_money(self, insert_amount) -> None:
         try:
             if self.db.get_data("select balance from user_info where userid = ?", (self.user_id,)) is None:
                 raise ValueError("User not found or balance is not set.")
@@ -16,7 +18,8 @@ class Balance_Operations():
         except ValueError as error:
             print(error)
     
-    def withdraw_money(self, withdraw_amount):
+    
+    def withdraw_money(self, withdraw_amount) -> None:
         try:
             balance = float(self.db.get_data("select balance from user_info where userid = ?", (self.user_id,)))
             if withdraw_amount <= 0:

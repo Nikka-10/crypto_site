@@ -100,7 +100,10 @@ def main():
                 print(crypto_operation.show_price())
                 continue
             elif action == "2":
-                crypto_operation.buy_crypto()
+                print("Available cryptocurrencies:", ', '.join(crypto_list))
+                coin = input("Which cryptocurrency do you want to buy? ").lower()
+                amount = float(input(f"Enter the amount you want to spend: "))
+                crypto_operation.buy_crypto(coin, amount)
                 continue
             elif action == "3":
                 crypto_operation.sell_crypto()
