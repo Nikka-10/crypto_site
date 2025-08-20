@@ -92,15 +92,13 @@ def main():
         
         while True:
             crypto = input("what cryptocurrency are you interested in? ")
-            crypto_list = [coin.strip().lower() for coin in crypto.split(",")]
-            crypto_operation = Operations.crypto_operations(user_id, crypto_list)
+            crypto_operation = Operations.crypto_operations(user_id, crypto)
             action = input(" 1.show price \n 2.buy \n 3.sell \n 4.convert \n 5.exit \n")
             
             if action == "1":
                 print(crypto_operation.show_price())
                 continue
             elif action == "2":
-                print("Available cryptocurrencies:", ', '.join(crypto_list))
                 coin = input("Which cryptocurrency do you want to buy? ").lower()
                 amount = float(input(f"Enter the amount you want to spend: "))
                 crypto_operation.buy_crypto(coin, amount)

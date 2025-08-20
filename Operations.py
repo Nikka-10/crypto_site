@@ -21,7 +21,7 @@ class crypto_operations():
         if amount > balance:
             raise ValueError("Insufficient balance.")
         
-        quantity = float(self.getapi.purchaseCrypto(coin, amount))
+        quantity = float(amount) / float(self.getapi.priceAPIcall())
         
         self.db.add_data("insert into user_crypto(user_id, coin, amount) values(?,?,?)",(self.user_id, coin, quantity))
         self.db.add_data("update user_info set balance = ? where user_id = ?", (balance - amount, self.user_id))

@@ -1,6 +1,7 @@
 import bcrypt
 import pyodbc
 
+
 class Hashing_password():
     def __init__(self, password):
         self.password = password.encode('utf-8')
