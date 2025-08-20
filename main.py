@@ -51,7 +51,7 @@ class sign_in():
     def check(self):
         checkpassword  = Hashing.check_password(self.connection_str ,self.email, self.password)
         if checkpassword.check_hash_password() == True:
-            return self.db.get_data("SELECT userid FROM user_info WHERE email = ?", (self.email,))
+            return self.db.get_data("SELECT user_id FROM user_info WHERE email = ?", (self.email,))
         else:
             raise ValueError
         
@@ -106,7 +106,9 @@ def main():
                 crypto_operation.buy_crypto(coin, amount)
                 continue
             elif action == "3":
-                crypto_operation.sell_crypto()
+                coin = input("wirte coine you want to sell: ")
+                amount = float(input("wirte amoun you want to sell: "))
+                crypto_operation.sell_crypto(coin, amount)
                 continue
             elif action == "4":
                 crypto_operation.convert()

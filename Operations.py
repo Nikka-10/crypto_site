@@ -17,22 +17,31 @@ class crypto_operations():
         
         
     def buy_crypto(self, coin, amount):
-        balance = float(self.db.get_data("select balance from user_info where userid = ?", (self.user_id,)))
+        balance = float(self.db.get_data("select balance from user_info where user_id = ?", (self.user_id,)))
         if amount > balance:
             raise ValueError("Insufficient balance.")
         
         quantity = float(self.getapi.purchaseCrypto(coin, amount))
         
-        self.db.add_data("insert into user_crypto(userid, coin, amount) values(?,?,?)",(self.user_id, coin, quantity))
-        self.db.add_data("update user_info set balance = ? where userid = ?", (balance - amount, self.user_id))
+        self.db.add_data("insert into user_crypto(user_id, coin, amount) values(?,?,?)",(self.user_id, coin, quantity))
+        self.db.add_data("update user_info set balance = ? where user_id = ?", (balance - amount, self.user_id))
         
              
     def sell_crypto(self, coin, amount):
-        balance = float(self.db.get_data("select balance from user_info where userid = ?", (self.user_id,)))
-        if not self.db.get_data("select coin from user_crypto where userid = ? and coin=?", (self.user_id, coin)):
+        balance = float(self.db.get_data("select balance from user_info where user_id = ?", (self.user_id,)))
+        
+        coin_amount_on_balance = float(self.db.get_data("select amount from user_crypto where user_id = ? and coin=?", (self.user_id, coin)))
+        
+        if not coin_amount_on_balance:
+            raise ValueError
+        if amount > coin_amount_on_balance:
             raise ValueError
         
-  
+        self.db.add_data("update user_crypto set amount = ? where user_id = ?", (coin_amount_on_balance - amount, self.user_id))
+        get_money = float(self.getapi.priceAPIcall()) * amount
+        self.db.add_data("update user_info set balance = ? where user_id = ?", (balance + get_money, self.user_id))
+        
+        
     def convert(self):
         ...
     

@@ -3,12 +3,12 @@ import pyodbc
 
 class Hashing_password():
     def __init__(self, password):
-        self.password = password
+        self.password = password.encode('utf-8')
     
     def hashing_scrypt(self):
         salt = bcrypt.gensalt()
-        b_password = self.password.encode('utf-8')
-        hashed_password = bcrypt.hashpw(b_password, salt)
+        b_password = self.password
+        hashed_password = bcrypt.hashpw(b_password, salt).decode('utf-8')
         
         return hashed_password
 
@@ -24,6 +24,6 @@ class check_password():
             cursor = conn.cursor()
             cursor.execute("select password_ from user_info where email = ?",(self.email,))
             row = cursor.fetchone()
-            saved_password = row[0].encode('utf-8')
+            saved_password = row[0]
             
-            return bcrypt.checkpw(self.entered_password, saved_password)
+            return bcrypt.checkpw(self.entered_password, saved_password.encode('utf-8'))

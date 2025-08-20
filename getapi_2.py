@@ -27,7 +27,7 @@ class API_requests():
         for coin in self.crypto_list:
             if coin.lower() in self.latest_prices:
                 price = self.latest_prices[coin.lower()][self.vs_currency.lower()]
-                return f'The price of {coin.title()} in {self.vs_currency.upper()} is ${price}'
+                return price
             else:
                 return f'{coin.title()} not found in API response.'
 
