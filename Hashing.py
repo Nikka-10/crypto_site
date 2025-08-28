@@ -6,6 +6,7 @@ class Hashing_password():
     def __init__(self, password):
         self.password = password.encode('utf-8')
     
+    
     def hashing_scrypt(self):
         salt = bcrypt.gensalt()
         b_password = self.password
@@ -19,6 +20,7 @@ class check_password():
         self.connection_str = connection_str
         self.email = email
         self.entered_password = entered_password.encode("utf-8")
+    
     
     def check_hash_password(self):
         with (pyodbc.connect(self.connection_str)) as conn:

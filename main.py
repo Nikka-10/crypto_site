@@ -91,12 +91,12 @@ def main():
             pass
         
         while True:
-            crypto = input("what cryptocurrency are you interested in? ")
-            crypto_operation = Operations.crypto_operations(user_id, crypto)
+            crypto_operation = Operations.crypto_operations(user_id)
             action = input(" 1.show price \n 2.buy \n 3.sell \n 4.convert \n 5.exit \n")
             
             if action == "1":
-                print(crypto_operation.show_price())
+                coin = input("write crypto currency: ")
+                print(crypto_operation.show_price(coin))
                 continue
             elif action == "2":
                 coin = input("Which cryptocurrency do you want to buy? ").lower()
@@ -109,7 +109,12 @@ def main():
                 crypto_operation.sell_crypto(coin, amount)
                 continue
             elif action == "4":
-                crypto_operation.convert()
+                coin_1 = input("write coin you want to convert:")
+                amount_1 = int(input("write amont:"))
+                
+                coin_2 = input("write coin you want to get: ")
+                
+                crypto_operation.convert(coin_1, amount_1, coin_2)
                 continue
             elif action == "5":
                 break
