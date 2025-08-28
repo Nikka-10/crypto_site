@@ -92,7 +92,7 @@ def main():
         
         while True:
             crypto_operation = Operations.crypto_operations(user_id)
-            action = input(" 1.show price \n 2.buy \n 3.sell \n 4.convert \n 5.exit \n")
+            action = input(" 1.show price \n 2.buy \n 3.sell \n 4.convert \n 5.send \n 6.exit \n")
             
             if action == "1":
                 coin = input("write crypto currency: ")
@@ -110,13 +110,17 @@ def main():
                 continue
             elif action == "4":
                 coin_1 = input("write coin you want to convert:")
-                amount_1 = int(input("write amont:"))
-                
+                amount_1 = int(input("write amont:")) 
                 coin_2 = input("write coin you want to get: ")
                 
                 crypto_operation.convert(coin_1, amount_1, coin_2)
                 continue
             elif action == "5":
+                recipient = input("write recipient id: ")
+                crypto = input("write crypto you want to send: ")
+                amount = int(input("write amount: "))
+                crypto_operation.send_crypto(recipient, crypto, amount)
+            elif action == "6":
                 break
             
     elif answer == '2':

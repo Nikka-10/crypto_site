@@ -68,6 +68,16 @@ class crypto_operations():
             self.db.add_data("insert into user_crypto(user_id, coin, amount) values(?,?,?)",(self.user_id, coin_2, received_coin_amount))
             
         
-    def send_crypto(self):
-        ...    
+    def send_crypto(self, recipient_id, coin, amount):
+        coin_amoun_on_balance = self.db.get_data("select amount from user_crypto where user_id = ? and coin = ?", (self.user_id, coin))
+        if int(coin_amoun_on_balance) < amount:
+            raise ValueError
+        
+        self.db.add_data("update user_crypto set amount = amount - ? where user_id = ? and coin = ?", (amount, self.user_id, coin))
+        
+        try:
+            self.db.add_data("update user_crypto set amount = amount + ? where user_id = ? and coin = ?", (amount, recipient_id, coin))
+        except:
+            self.db.add_data("insert into user_crypto(user_id, coin, amount) values(?,?,?)",(recipient_id, coin, amount))
+          
     
