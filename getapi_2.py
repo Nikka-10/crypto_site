@@ -1,10 +1,10 @@
 import requests
 import json
 
-#not sure if i need to create class in this situation, meybe later i will add some new funcions
+
 class API_requests():
     
-    def __init__(self, crypto_currency, vs_currency = 'usd'):
+    def __init__(self, crypto_currency: str, vs_currency: str = 'usd'):
         self.crypto_currency = crypto_currency
         self.vs_currency = vs_currency
         
@@ -21,7 +21,7 @@ class API_requests():
         self.response = requests.get(url, params=params, headers=headers)
     
     
-    def priceAPIcall(self):
+    def priceAPIcall(self) -> int:
         price = self.response.json()
         return int(price[self.crypto_currency][self.vs_currency])
         

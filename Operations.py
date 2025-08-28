@@ -9,6 +9,7 @@ class crypto_operations():
         self.user_id = user_id
         self.crypto_currency = crypto_currency
         self.getapi = getapi_2.API_requests(self.crypto_currency)
+        self.price = None
     
     
     def show_price(self):
@@ -23,8 +24,12 @@ class crypto_operations():
         
         quantity = float(amount) / float(self.getapi.priceAPIcall())
         
-        self.db.add_data("insert into user_crypto(user_id, coin, amount) values(?,?,?)",(self.user_id, coin, quantity))
-        self.db.add_data("update user_info set balance = ? where user_id = ?", (balance - amount, self.user_id))
+        try:
+            self.db.add_data("insert into user_crypto(user_id, coin, amount) values(?,?,?)",(self.user_id, coin, quantity))
+        except:
+            self.db.add_data("update user_crypto set amount = amount + ? where user_id = ? and coin = ?",(quantity, self.user_id, coin))
+        finally:
+            self.db.add_data("update user_info set balance = ? where user_id = ?", (balance - amount, self.user_id))
         
              
     def sell_crypto(self, coin, amount):
@@ -37,7 +42,7 @@ class crypto_operations():
         if amount > coin_amount_on_balance:
             raise ValueError
         
-        self.db.add_data("update user_crypto set amount = ? where user_id = ?", (coin_amount_on_balance - amount, self.user_id))
+        self.db.add_data("update user_crypto set amount = ? where user_id = ? and coin = ?", (coin_amount_on_balance - amount, self.user_id, coin))
         get_money = float(self.getapi.priceAPIcall()) * amount
         self.db.add_data("update user_info set balance = ? where user_id = ?", (balance + get_money, self.user_id))
         

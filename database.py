@@ -15,7 +15,7 @@ class database():
         return self.connection_str
     
     
-    def get_data(self, sql_code, sql_input) -> str:
+    def get_data(self, sql_code: str, sql_input: str) -> str:
         with pyodbc.connect(self.connection_str) as conn:
                 cursor = conn.cursor()
                 cursor.execute(sql_code, sql_input)
@@ -23,7 +23,7 @@ class database():
                 return result[0]
             
             
-    def add_data(self, sql_code, sql_input) -> bool:
+    def add_data(self, sql_code: str, sql_input: str) -> bool:
         with pyodbc.connect(self.connection_str) as conn:
                 cursor = conn.cursor()
                 cursor.execute(sql_code, sql_input)
