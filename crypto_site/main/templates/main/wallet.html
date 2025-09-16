@@ -5,14 +5,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>KhurmaX Wallet - შენი კრიპტო სივრცე</title>
-  <link rel="stylesheet" href="{% static 'main/wallet.css' %}" />
+  <link rel="stylesheet" href="{% static 'main/wallet-style.css' %}" />
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <header>
     <h1>KhurmaX Wallet</h1>
     <p>Binance-ის ცოცხალი ფასები და უსაფრთხო ვაჭრობა</p>
-    <a href="index.html" class="back-home">← დაბრუნება მთავარ გვერდზე</a>
+    <a href="{% url "index" %}" class="back-home">← დაბრუნება მთავარ გვერდზე</a>
   </header>
 
   <div class="user-profile-box">

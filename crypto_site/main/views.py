@@ -8,3 +8,12 @@ def index(request):
 def about(request):
     return render(request, 'main/about.html')
 
+def login(request):
+    return render(request, 'main/login.html')
+
+def register(request):
+    return render(request, 'main/register.html')
+
+def wallet(request):
+    return render(request, 'main/wallet.html')
+

@@ -11,20 +11,20 @@
 <body>
   <header>
     <div class="container">
-      <a href="index.html" class="logo">
+      <a href="{% url "index" %}" class="logo">
         <img src="https://gclnk.com/aLleVbxg" alt="khurmix Logo">
         <span>KhurmaX</span>
       </a>
       <nav>
         <ul>
-          <li><a href="index.html">მთავარი</a></li>
-          <li><a href="wallet.html">კაბინეტი/საფულე</a></li>
-          <li><a href="about.html">ჩვენს შესახებ</a></li>
+          <li><a href="{% url "index" %}">მთავარი</a></li>
+          <li><a href="{% url "wallet" %}">კაბინეტი/საფულე</a></li>
+          <li><a href="{% url "about" %}">ჩვენს შესახებ</a></li>
         </ul>
       </nav>
-      <div class="auth-buttons">
-        <a href="login.html"><button class="login">შესვლა</button></a>
-        <a href="register.html"><button class="register">რეგისტრაცია</button></a>
+      <div class="auth-button">
+        <a href="{% url "login" %}"><button class="login">შესვლა</button></a>
+        <a href="{% url "register" %}"><button class="register">რეგისტრაცია</button></a>
       </div>
     </div>
   </header>
@@ -32,7 +32,7 @@
   <section class="hero">
     <div class="container">
       <h1>ივაჭრეთ კრიპტოვალუტით სწრაფად და უსაფრთხოდ</h1>
-      <a href="register.html"><button class="cta">დაწყება</button></a>
+      <a href="{% url "register" %}"><button class="cta">დაწყება</button></a>
     </div>
   </section>
   <section class="features">
@@ -63,7 +63,7 @@
   <footer class="footer">
     <div class="container footer-container">
       <div class="footer-top">
-        <a href="index.html" class="logo">
+        <a href="{% url "index" %}" class="logo">
           <img src="https://gclnk.com/aLleVbxg" alt="khurmix Logo">
           <span>KhurmaX</span></a>
         <div class="social-icons">

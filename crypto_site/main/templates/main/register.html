@@ -17,9 +17,9 @@
         <input type="password" placeholder="პაროლი" required>
         <input type="password" placeholder="გაიმეორე პაროლი" required>
         <button type="submit">რეგისტრირება</button>
-        <a href="login.html" class="register-link-button">შესვლა</a>
+        <a href="{% url "login" %}" class="register-link-button">შესვლა</a>
       </form>
-      <a href="index.html" class="back-home">← დაბრუნება მთავარ გვერდზე</a>
+      <a href="{% url "index" %}" class="back-home">← დაბრუნება მთავარ გვერდზე</a>
     </div>
   </div>
 </body>

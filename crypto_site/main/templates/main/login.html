@@ -27,9 +27,9 @@
           oninput="this.setCustomValidity('')"
         >
         <button type="submit">შესვლა</button>
-        <a href="register.html" class="register-link-button">რეგისტრაცია</a>
+        <a href="{% url "register" %}" class="register-link-button">რეგისტრაცია</a>
       </form>
-      <a href="index.html" class="back-home">← დაბრუნება მთავარ გვერდზე</a>
+      <a href="{% url "index" %}" class="back-home">← დაბრუნება მთავარ გვერდზე</a>
     </div>
   </div>
 </body>
