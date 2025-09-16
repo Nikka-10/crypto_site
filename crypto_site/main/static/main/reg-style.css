@@ -1,0 +1,89 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #0e0e0e;
+    color: #fff;
+  }
+  
+  .register-body {
+    background-color: #0d0d0d;
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .register-wrapper {
+    background-color: #1a1a1a;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0,255,255,0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+  }
+  
+  .register-box h2 {
+    margin-bottom: 1.5rem;
+    color: #00fff7;
+  }
+  
+  .register-form input {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: none;
+    border-radius: 8px;
+    background: #333;
+    color: white;
+    box-sizing: border-box;
+  }
+  
+  .register-form button {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 15px;
+    background: #00fff7;
+    border: none;
+    border-radius: 8px;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .register-form button:hover {
+    background: #00c2c2;
+  }
+  
+  .register-link-button {
+    display: block;
+    width: 380px;
+    padding: 10px;
+    margin-top: 10px;
+    text-align: center;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-family: inherit;
+    transition: background-color 0.3s ease;
+  }
+  
+  .register-link-button:hover {
+    background-color: #45a049;
+  }
+  
+  .back-home {
+    display: block;
+    margin-top: 1rem;
+    color: #00fff7;
+    text-decoration: none;
+    text-align: center;
+  }
+  
+  .back-home:hover {
+    text-decoration: underline;
+  }
