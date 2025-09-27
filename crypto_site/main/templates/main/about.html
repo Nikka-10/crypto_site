@@ -1,81 +1,36 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="ka">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Khurmax - კრიპტო პლატფორმა</title>
+{% extends "main/layout.html" %}
+{% block css_link %}
+  {% load static %}
   <link rel="stylesheet" href="{% static 'main/about.css' %}" />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-</head>
-<body>
-  <header>
-    <div class="container">
-      <a href="{% url "index" %}" class="logo">
-        <img src="https://gclnk.com/aLleVbxg" alt="khurmix Logo">
-        <span>KhurmaX</span>
-      </a>
-      <nav>
-        <ul>
-          <li><a href="{% url "index" %}">მთავარი</a></li>
-          <li><a href="{% url "wallet" %}">კაბინეტი/საფულე</a></li>
-          <li><a href="{% url "about" %}">ჩვენს შესახებ</a></li>
-        </ul>
-      </nav>
-      <div class="auth-buttons">
-        <a href="{% url "login" %}"><button class="login">შესვლა</button></a>
-        <a href="{% url "register" %}"><button class="register">რეგისტრაცია</button></a>
+{% endblock css_link %}
+{% block body %}
+
+<section class="team-section dark-section">
+  <div class="container">
+    <h1 class="team-title">ჩვენი გუნდი</h1>
+    <div class="team-grid">
+      <div class="team-member">
+        <img src="https://gclnk.com/g8wA4Q95" alt="ნიკოლოზ გვასალია">
+        <h3>ნიკოლოზ გვასალია</h3>
+        <p>დამაარსებელი / team Lead/ system architect/ main Backend</p>
+      </div>
+      <div class="team-member">
+        <img src="https://gclnk.com/sNqvbYE4" alt="საბა ცინარიძე">
+        <h3>საბა ცინარიძე</h3>
+        <p>Co-Founder / Frontend Lead / UI / UX / top seller/ infocigan</p>
+      </div>
+      <div class="team-member">
+        <img src="https://gclnk.com/6Pe3KUlN" alt="ლევანა">
+        <h3>ლევან ბეციაშვილი</h3>
+        <p>Backend dev</p>
+      </div>
+      <div class="team-member">
+        <img src="https://gclnk.com/J1gOdTcn" alt="ანასტასია">
+        <h3>ანასტასია გურაბანიძე</h3>
+        <p>...</p>
       </div>
     </div>
-  </header>
-  <section class="team-section dark-section">
-    <div class="container">
-      <h1 class="team-title">ჩვენი გუნდი</h1>
-      <div class="team-grid">
-        <div class="team-member">
-          <img src="https://gclnk.com/g8wA4Q95" alt="ნიკოლოზ გვასალია">
-          <h3>ნიკოლოზ გვასალია</h3>
-          <p>დამაარსებელი / team Lead/ system architect/ main Backend</p>
-        </div>
-        <div class="team-member">
-          <img src="https://gclnk.com/sNqvbYE4" alt="საბა ცინარიძე">
-          <h3>საბა ცინარიძე</h3>
-          <p>Co-Founder / Frontend Lead / UI / UX / top seller/ infocigan</p>
-        </div>
-        <div class="team-member">
-          <img src="https://gclnk.com/6Pe3KUlN" alt="ლევანა">
-          <h3>ლევან ბეციაშვილი</h3>
-          <p>Backend dev</p>
-        </div>
-        <div class="team-member">
-          <img src="https://gclnk.com/J1gOdTcn" alt="ანასტასია">
-          <h3>ანასტასია გურაბანიძე</h3>
-          <p>...</p>
-        </div>
-      </div>
-      <a href="{% url "index" %}" class="back-home">← დაბრუნება მთავარ გვერდზე</a>
-    </div>
-  </section>
-  <footer class="footer">
-    <div class="container footer-container">
-      <div class="footer-top">
-        <a href="{% url "index" %}" class="logo">
-          <img src="https://gclnk.com/aLleVbxg" alt="KhurmaX Logo">
-          <span>KhurmaX</span>
-        </a>
-        <div class="social-icons">
-          <a href="#"><img src="https://img.icons8.com/ios-filled/24/00fff7/facebook-new.png" alt="Facebook"></a>
-          <a href="#"><img src="https://img.icons8.com/ios-filled/24/00fff7/twitter.png" alt="Twitter"></a>
-          <a href="#"><img src="https://img.icons8.com/ios-filled/24/00fff7/telegram-app.png" alt="Telegram"></a>
-          <a href="#"><img src="https://img.icons8.com/ios-filled/24/00fff7/instagram-new.png" alt="Instagram"></a>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>დაგვიკავშირდით: <a href="mailto:support@khurmax.com">support@khurmax.com</a></p>
-        <p>ტელ: <a href="tel:+995500505555">(+995) 500 505 555</a></p>
-        <p>© 2025 KhurmaX — ყველა უფლება დაცულია</p>
-      </div>
-    </div>
-  </footer>
-</body>
-</html>
+    <a href="{% url "main:index" %}" class="back-home">← დაბრუნება მთავარ გვერდზე</a>
+  </div>
+</section>
+{% endblock body %}

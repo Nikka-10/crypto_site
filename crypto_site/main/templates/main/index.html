@@ -1,84 +1,41 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="ka">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Khurmax - კრიპტო პლატფორმა</title>
-  <link rel="stylesheet" href="{% static 'main/style.css' %}" />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-</head>
-<body>
-  <header>
-    <div class="container">
-      <a href="{% url "index" %}" class="logo">
-        <img src="https://gclnk.com/aLleVbxg" alt="khurmix Logo">
-        <span>KhurmaX</span>
-      </a>
-      <nav>
-        <ul>
-          <li><a href="{% url "index" %}">მთავარი</a></li>
-          <li><a href="{% url "wallet" %}">კაბინეტი/საფულე</a></li>
-          <li><a href="{% url "about" %}">ჩვენს შესახებ</a></li>
-        </ul>
-      </nav>
-      <div class="auth-button">
-        <a href="{% url "login" %}"><button class="login">შესვლა</button></a>
-        <a href="{% url "register" %}"><button class="register">რეგისტრაცია</button></a>
-      </div>
-    </div>
-  </header>
-  
-  <section class="hero">
-    <div class="container">
-      <h1>ივაჭრეთ კრიპტოვალუტით სწრაფად და უსაფრთხოდ</h1>
-      <a href="{% url "register" %}"><button class="cta">დაწყება</button></a>
-    </div>
-  </section>
-  <section class="features">
-    <div class="container">
-      <div class="feature">🧾 სწრაფი ტრანზაქციები</div>
-      <div class="feature">🔐 უსაფრთხოება</div>
-      <div class="feature">📊 ლაივ გრაფიკები</div>
-      <div class="feature">📈 მარტივი დამუშავება</div>
-    </div>
-  </section>
+{% extends "main/layout.html" %}
 
-  <section class="chart-section">
-    <iframe src="https://s.tradingview.com/widgetembed/?symbol=BITSTAMP%3ABTCUSD&interval=60&theme=dark&style=1" loading="lazy"></iframe>
-  </section>
-  <section class="cryptos">
-    <div class="container">
-      <h2>პოპულარული ქოინების ფასები</h2>
-      <div class="grid">
-        <div class="card">Bitcoin <span class="price">$104,518.9</span> <span class="change down">-1.85%</span></div>
-        <div class="card">Ethereum <span class="price">$2,565.79</span> <span class="change down">-4.06%</span></div>
-        <div class="card">Litecoin <span class="price">$88.32</span> <span class="change down">-8.07%</span></div>
-        <div class="card">Ripple <span class="price">$2.18</span> <span class="change down">-4.55%</span></div>
-        <div class="card">Pepe <span class="price">$0.0000012648</span> <span class="change down">-9.67%</span></div>
-        <div class="card">Shiba Inu <span class="price">$0.00001303</span> <span class="change down">-9.36%</span></div>
-      </div>
+{% block css_link %}
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'main/style.css' %}" />
+{% endblock css_link %}
+{% block body %}
+
+<section class="hero">
+  <div class="container">
+    <h1>ივაჭრეთ კრიპტოვალუტით სწრაფად და უსაფრთხოდ</h1>
+    <a href="{% url "users:sign_up" %}"><button class="cta">დაწყება</button></a>
+  </div>
+</section>
+<section class="features">
+  <div class="container">
+    <div class="feature">🧾 სწრაფი ტრანზაქციები</div>
+    <div class="feature">🔐 უსაფრთხოება</div>
+    <div class="feature">📊 ლაივ გრაფიკები</div>
+    <div class="feature">📈 მარტივი დამუშავება</div>
+  </div>
+</section>
+
+<section class="chart-section">
+  <iframe src="https://s.tradingview.com/widgetembed/?symbol=BITSTAMP%3ABTCUSD&interval=60&theme=dark&style=1" loading="lazy"></iframe>
+</section>
+<section class="cryptos">
+  <div class="container">
+    <h2>პოპულარული ქოინების ფასები</h2>
+    <div class="grid">
+      <div class="card">Bitcoin <span class="price">$104,518.9</span> <span class="change down">-1.85%</span></div>
+      <div class="card">Ethereum <span class="price">$2,565.79</span> <span class="change down">-4.06%</span></div>
+      <div class="card">Litecoin <span class="price">$88.32</span> <span class="change down">-8.07%</span></div>
+      <div class="card">Ripple <span class="price">$2.18</span> <span class="change down">-4.55%</span></div>
+      <div class="card">Pepe <span class="price">$0.0000012648</span> <span class="change down">-9.67%</span></div>
+      <div class="card">Shiba Inu <span class="price">$0.00001303</span> <span class="change down">-9.36%</span></div>
     </div>
-  </section>
-  <footer class="footer">
-    <div class="container footer-container">
-      <div class="footer-top">
-        <a href="{% url "index" %}" class="logo">
-          <img src="https://gclnk.com/aLleVbxg" alt="khurmix Logo">
-          <span>KhurmaX</span></a>
-        <div class="social-icons">
-          <a href="#"><img src="https://img.icons8.com/ios-filled/24/00fff7/facebook-new.png" alt="Facebook"></a>
-          <a href="#"><img src="https://img.icons8.com/ios-filled/24/00fff7/twitter.png" alt="Twitter"></a>
-          <a href="#"><img src="https://img.icons8.com/ios-filled/24/00fff7/telegram-app.png" alt="Telegram"></a>
-          <a href="#"><img src="https://img.icons8.com/ios-filled/24/00fff7/instagram-new.png" alt="Instagram"></a>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>დაგვიკავშირდით: <a href="mailto:support@khurmax.com">support@khurmax.com</a></p>
-        <p>ტელ: <a href="tel:+995500505555">(+995) 500 505 555</a></p>
-        <p>© 2025 Khurmax — ყველა უფლება დაცულია</p>
-      </div>
-    </div>
-  </footer>  
-</body>
-</html>
+  </div>
+</section>
+
+{% endblock body %}

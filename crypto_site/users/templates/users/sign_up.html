@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>რეგისტრაცია - Khurmax</title>
+  <link rel="stylesheet" href={% static 'users/reg-style.css' %}>
+</head>
+<body class="register-body">
+  <div class="register-wrapper">
+    <div class="register-box">
+      <h2>დარეგისტრირდი</h2>
+      <form class="register-form" method='POST'>
+        {% csrf_token %}
+        <input type="text" placeholder="მომხმარებლის სახელი" name='fname' required>
+        <input type="text" placeholder="მომხმარებლის გვარი" name='lname' required>
+        <input type="email" placeholder="ელ.ფოსტა" name='email' required>
+        <input type="password" placeholder="პაროლი" name='password' required>
+        <input type="password" placeholder="გაიმეორე პაროლი" name='password2' required>
+        <button type="submit">რეგისტრირება</button>
+        <a href="{% url "users:login" %}" class="register-link-button">შესვლა</a>
+      </form>
+      <a href="{% url "main:index" %}" class="back-home">← დაბრუნება მთავარ გვერდზე</a>
+    </div>
+  </div>
+</body>
+</html>
