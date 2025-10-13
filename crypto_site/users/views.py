@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 
 
-def sign_up_page(request):
+def sign_up(request):
     if request.method == 'POST':
         fname = request.POST['fname']
         lname = request.POST['lname']
@@ -23,7 +23,7 @@ def sign_up_page(request):
     return render(request, "users/sign_up.html")
 
 
-def login_page(request):
+def log_in(request):
     if request.method == 'POST':
         email = request.POST['email']
         password = request.POST['password']
@@ -41,3 +41,8 @@ def login_page(request):
             return redirect("users/sign_up.html")
                
     return render(request, "users/login.html")
+
+def log_out(request):
+    if request.method == 'POST':
+        logout(request)
+        return redirect("main:index")

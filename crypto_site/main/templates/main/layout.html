@@ -25,7 +25,11 @@
       </nav>
       <div class="auth-button">
         {% if user.is_authenticated %}
-          <img src="crypto_site\crypto_site\main\static\main\logout-icon-png-transparent-login-logout-icon-11562923416nzkie6fbka.png" alt="log out">
+          {{ user.username }}
+          <form class="logout" action = {% url "users:logout" %} method = "POST">
+            {% csrf_token %}
+            <button class="logout_button">log out</button>
+          </form>
         {% else %}
           <a href="{% url "users:sign_up" %}"><button class="register">რეგისტრაცია</button></a>
           <a href="{% url "users:login" %}"><button class="login">შესვლა</button></a>
