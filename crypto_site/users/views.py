@@ -1,20 +1,22 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
+from .models import CustomUser
 from django.contrib.auth import login, logout, authenticate
 
 
 def sign_up(request):
     if request.method == 'POST':
-        fname = request.POST['fname']
-        lname = request.POST['lname']
+        first_name = request.POST['fname']
+        last_name = request.POST['lname']
         email = request.POST['email']
         password = request.POST['password']
-        username = fname +" "+ lname
+        username = first_name +" "+ last_name
         
-        user = User.objects.create_user(
+        user = CustomUser.objects.create_user(
             username = username, 
             email = email, 
-            password = password
+            password = password,
+            first_name=first_name,
+            last_name=last_name 
             )
         user.save()
         
@@ -29,9 +31,9 @@ def log_in(request):
         password = request.POST['password']
 
         try:
-            user_obj = User.objects.get(email=email)
+            user_obj = CustomUser.objects.get(email=email)
             user = authenticate(request, username=user_obj.username, password=password)
-        except User.DoesNotExist:
+        except CustomUser.DoesNotExist:
             user = None
         
         if user:
