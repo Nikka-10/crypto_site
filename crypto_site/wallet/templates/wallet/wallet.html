@@ -22,7 +22,7 @@
     </div>
     <div class="user-field">
       <label>ელ.ფოსტა</label>
-      <div class="user-value">giorgi@example.com</div>
+      <div class="user-value">{{ user.email }}</div>
     </div>
   </div>
 
@@ -104,7 +104,7 @@
   </footer>
 
   <div id="toast-container"></div>
-  <script src="wallet-script.js" defer></script>
+  <script src="{% static 'wallet/wallet-script.js' %}" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="https://s3.tradingview.com/tv.js"></script>
 </body>
