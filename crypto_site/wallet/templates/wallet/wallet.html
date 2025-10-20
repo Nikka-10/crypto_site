@@ -29,15 +29,28 @@
   <main>
     <section class="balance-section">
       <h2>შენი ბალანსი</h2>
-      <div id="cash-balance" class="cash-balance">$0.00</div>
-      <div class="cash-actions">
-        <input type="number" id="deposit-amount" min="0" placeholder="დეპოზიტის ოდენობა ($)" />
-        <button id="deposit-btn">შეტანა</button>
-        <input type="number" id="withdraw-amount" min="0" placeholder="გამოტანის ოდენობა ($)" />
-        <button id="withdraw-btn">გამოტანა</button>
-      </div>
+      <div id="cash-balance" class="cash-balance">{{ user.balance }}$</div>
+      <form method="POST" action="{% url 'wallet:insert_money' %}">
+        {% csrf_token %}
+        <div class="cash-actions">
+          <input type="number" name='deposit_amount'id="deposit-amount" min="0" placeholder="დეპოზიტის ოდენობა ($)" />
+          <button type="submit" id="deposit-btn">შეტანა</button>
+        </div>
+        </form>
+
+      <form method="POST" action="{% url 'wallet:withdraw_money' %}">
+          {% csrf_token %}
+          <div class="cash-actions">
+          <input type="number" name="withdraw_amount" id="withdraw-amount" min="0" placeholder="გამოტანის ოდენობა ($)" />
+          <button type="submit" id="withdraw-btn">გამოტანა</button>
+          </div>
+        </form>
+
       <h2>კრიპტოვალუტების ბალანსი</h2>
-      <ul id="crypto-balances" class="crypto-balances"></ul>
+      {% for wallet in user_cryptos  %}
+        <ul id="crypto-balances" class="crypto-balances">{{ wallet.crypto.name}} --- {{ wallet.crypto.symbol}} --- {{ wallet.amount}}</ul>
+      
+      {% endfor %}
     </section>
 
     <section class="trade-section">
@@ -104,7 +117,7 @@
   </footer>
 
   <div id="toast-container"></div>
-  <script src="{% static 'wallet/wallet-script.js' %}" defer></script>
+  <!-- <script src="{% static 'wallet/wallet-script.js' %}" defer></script> -->
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="https://s3.tradingview.com/tv.js"></script>
 </body>

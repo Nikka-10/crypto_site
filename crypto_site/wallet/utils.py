@@ -24,8 +24,11 @@ def update_crypto_price():
                 
             
             price = response.json()
-            crypto.price_usd = int(price[crypto.name]['usd'])
+            crypto.price_usd = float(price[crypto.name]['usd'])
             crypto.save()
             
         except requests.exceptions.RequestException as e:
              print(f"Error updating {crypto.name}: {e}")
+             
+
+        
