@@ -10,8 +10,9 @@ def update_crypto_price():
                 }
     
     for crypto in Crypto.objects.all():
+        crypto_id = crypto.name.lower()
         params = {
-            'ids': crypto.name.lower(),
+            'ids': crypto_id,
             'vs_currencies': 'usd'
             }
         try:    
@@ -24,7 +25,7 @@ def update_crypto_price():
                 
             
             price = response.json()
-            crypto.price_usd = float(price[crypto.name]['usd'])
+            crypto.price_usd = float(price[crypto_id]['usd'])
             crypto.save()
             
         except requests.exceptions.RequestException as e:
