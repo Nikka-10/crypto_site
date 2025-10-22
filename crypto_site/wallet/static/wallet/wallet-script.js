@@ -1,5 +1,6 @@
 const $ = (id) => document.getElementById(id);
 
+
 Array.from(document.querySelectorAll('.trade-btn')).forEach(btn => {
   btn.onclick = () => {
     document.querySelectorAll('.trade-btn').forEach(b => b.classList.remove('active'));
