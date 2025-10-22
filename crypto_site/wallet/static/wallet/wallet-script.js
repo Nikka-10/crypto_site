@@ -7,6 +7,7 @@ Array.from(document.querySelectorAll('.trade-btn')).forEach(btn => {
     document.querySelectorAll('.trade-panel').forEach(p => p.classList.remove('active'));
     btn.classList.add('active');
     $(btn.dataset.target).classList.add('active');
+    operationInput.value = btn.dataset.target;
   };
 });
 
@@ -28,6 +29,33 @@ function loadTradingView(symbol = "BTCUSDT") {
     studies: ["MACD@tv-basicstudies"],
   });
 }
+
+
+function setupAmountCheck(inputId, buttonId) {
+  const input = $(inputId);
+  const button = $(buttonId);
+
+  const check = () => {
+    const value = parseFloat(input.value);
+    if (!value || value <= 0) {
+      button.disabled = true;
+      button.style.opacity = "0.5"; 
+      button.style.cursor = "not-allowed";
+    } else {
+      button.disabled = false;
+      button.style.opacity = "1";
+      button.style.cursor = "pointer";
+    }
+  };
+
+  input.addEventListener("input", check);
+  check();
+}
+
+setupAmountCheck("buy-amount", "buy-btn");
+setupAmountCheck("sell-amount", "sell-btn");
+setupAmountCheck("convert-amount", "convert-btn");
+
 
 window.onload = () => {
   loadTradingView(); 

@@ -41,6 +41,7 @@ def log_in(request):
         return redirect("users/sign_up.html")
             
 
+
 def log_out(request):
     logout(request)
     return redirect('main:index')

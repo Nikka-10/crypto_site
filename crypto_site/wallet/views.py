@@ -38,4 +38,38 @@ def withdraw_money(request):
         return redirect('wallet:wallet')
     
     
+def buy_crypto(request, name, amount):
+    ...
+  
+    
+def sell_crypto(request, name, amount):
+    ...
+  
+    
+def convert_crypto(request, from_crypto, to_crypto, amount):
+    ...
+  
+    
+@require_POST
+def trade(request):
+    operation = request.POST.get('operation')
+    
+    if operation == 'buy':
+        name = request.POST.get('crypto')
+        amount = float(request.POST.get('amount', 0))
+        
+        buy_crypto(request, name, amount)
+    elif operation == 'sell':
+        name = request.POST.get('crypto')
+        amount = float(request.POST.get('amount', 0))    
+            
+        sell_crypto(request, name, amount)
+    elif operation == 'convert':
+        from_crypto = request.POST.get('from_crypto')
+        to_crypto = request.POST.get('to_crypto')
+        amount = float(request.POST.get('amount', 0))
+        
+        convert_crypto(request, from_crypto, to_crypto, amount)
+    
+    
         
