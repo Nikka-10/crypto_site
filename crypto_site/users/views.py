@@ -38,7 +38,7 @@ def log_in(request):
         login(request, user)
         return redirect('main:index')
     else:
-        return redirect("users/sign_up.html")
+        return redirect("users:sign_up")
             
 
 

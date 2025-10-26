@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-from .utils import if_POST
 from django.contrib.auth.decorators import login_required
 from .utils import update_crypto_price
 from .models import Wallet, Crypto
@@ -38,38 +37,93 @@ def withdraw_money(request):
         return redirect('wallet:wallet')
     
     
-def buy_crypto(request, name, amount):
-    ...
-  
+def buy_crypto(request, name, amount): 
+    user = request.user
+    crypto = Crypto.objects.get(name=name)
+    
+    price_unit = crypto.price_usd
+    if amount != '':
+        total_amount = Decimal(price_unit) * Decimal(amount)
+        
+        if user.balance >= total_amount:
+            user.balance -= total_amount
+            user.save()
+            
+            wallet, created = Wallet.objects.get_or_create(user=user, crypto=crypto)      
+            wallet.amount += Decimal(amount)
+            wallet.save()    
+            
+    
     
 def sell_crypto(request, name, amount):
-    ...
-  
+    user = request.user
+    crypto = Crypto.objects.get(name=name)
+    if amount != '':
+        money_amount = Decimal(crypto.price_usd) * Decimal(amount)
+        
+        try:
+            wallet = Wallet.objects.get(user=user, crypto=crypto)
+        except Wallet.DoesNotExist:
+            return
+        
+        if wallet.amount >= Decimal(amount):
+            wallet.amount -= Decimal(amount)
+            user.balance += money_amount
+            wallet.save()
+            user.save()
+
     
 def convert_crypto(request, from_crypto, to_crypto, amount):
-    ...
-  
+    user = request.user
+    crypto1 = Crypto.objects.get(name=from_crypto)
+    crypto2 = Crypto.objects.get(name=to_crypto)
+    
+    price1 = crypto1.price_usd
+    price2 = crypto2.price_usd
+    
+    if amount != '':
+        total_money = Decimal(price1) * Decimal(amount)
+        to_crypto_amount = float(total_money / price2)
+        
+        
+        try:
+            wallet1 = Wallet.objects.get(user=user, crypto=crypto1)
+            wallet2, created = Wallet.objects.get_or_create(user=user, crypto=crypto2, defaults={'amount': 0})
+        except Wallet.DoesNotExist:
+            return
+        
+        if wallet1.amount >= Decimal(amount):
+            wallet1.amount -= Decimal(amount)
+            wallet2.amount += Decimal(to_crypto_amount)
+            wallet1.save()
+            wallet2.save()
+
+        
     
 @require_POST
 def trade(request):
     operation = request.POST.get('operation')
     
     if operation == 'buy':
-        name = request.POST.get('crypto')
-        amount = float(request.POST.get('amount', 0))
+        name = request.POST.get('buy-crypto')
+        amount = request.POST.get('buy-amount', 0)
         
         buy_crypto(request, name, amount)
+        
     elif operation == 'sell':
-        name = request.POST.get('crypto')
-        amount = float(request.POST.get('amount', 0))    
-            
+        name = request.POST.get('sell-crypto')
+        amount = request.POST.get('sell-amount', 0)  
+        
         sell_crypto(request, name, amount)
+        
     elif operation == 'convert':
         from_crypto = request.POST.get('from_crypto')
         to_crypto = request.POST.get('to_crypto')
-        amount = float(request.POST.get('amount', 0))
+        amount = request.POST.get('convert-amount', 0)
         
         convert_crypto(request, from_crypto, to_crypto, amount)
+    
+    return redirect('wallet:wallet')
     
     
         

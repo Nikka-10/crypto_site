@@ -8,10 +8,10 @@ class Crypto(models.Model):
     last_updated = models.DateTimeField(auto_now=True)
     
     def __str__(self):
-        return f"{self.name} ({self.symbol})"
+        return self.name
     
     
 class Wallet(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     crypto = models.ForeignKey(Crypto, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=20, decimal_places=8)
+    amount = models.DecimalField(max_digits=20, decimal_places=8, default=0)
