@@ -4,6 +4,8 @@ from .utils import update_crypto_price
 from .models import Wallet, Crypto
 from decimal import Decimal
 from django.views.decorators.http import require_POST
+from .models import CustomUser
+from django.db import transaction
 
 
 @login_required(login_url='/login/')
@@ -124,6 +126,41 @@ def trade(request):
         convert_crypto(request, from_crypto, to_crypto, amount)
     
     return redirect('wallet:wallet')
+
+
+@require_POST
+@transaction.atomic
+def transactions(request):
+    user = request.user
+    getter_email = request.POST.get('email')
+    crypto = Crypto.objects.get(name=request.POST.get('crypto_name'))
+    
+    try:
+        getter = CustomUser.objects.get(email=getter_email)
+    except CustomUser.DoesNotExist:
+        return 'error: Receiver not found'
+
+    crypto = Crypto.objects.get(name=request.POST.get('crypto_name'))
+
+    try:
+        user_wallet = Wallet.objects.get(user=user, crypto=crypto)
+        getter_wallet, _ = Wallet.objects.get_or_create(user=getter, crypto=crypto)
+    except Wallet.DoesNotExist:
+        return 'error: You dont own this crypto'
+    
+    amount = Decimal(request.POST.get('amount'))
+    if amount > 0 and user_wallet.amount >= amount:
+        user_wallet.amount -= amount
+        getter_wallet.amount += amount
+        user_wallet.save()
+        getter_wallet.save()
+    return redirect('wallet:wallet')
+    
+    
+    
+    
+    
+
     
     
         

@@ -53,6 +53,18 @@ window.onload = () => {
   setupAmountCheck("buy-amount", "buy-btn");
   setupAmountCheck("sell-amount", "sell-btn");
   setupAmountCheck("convert-amount", "convert-btn");
+  setupAmountCheck("send-amount", "send-btn");
+
+  document.querySelector(".send-form").addEventListener("submit", (e) => {
+  const email = document.getElementById("send-email").value;
+  const crypto = document.getElementById("send-crypto").value;
+  const amount = document.getElementById("send-amount").value;
+
+  if (!confirm(`გგსურს ${amount} ${crypto} გადაუგზავნო ${email}?`)) {
+    e.preventDefault();
+  }
+});
+
 
   loadTradingView();
 };

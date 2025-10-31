@@ -156,6 +156,56 @@ button:disabled {
   color: #bbb;
 }
 
+.send-section {
+  margin-top: 50px;
+  background: #1a1a1a;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+.send-section h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+.send-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.send-form label {
+  color: #ccc;
+  font-weight: 500;
+}
+
+.send-form input,
+.send-form select {
+  background: #2a2a2a;
+  border: 1px solid #444;
+  color: #fff;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 14px;
+}
+
+.send-form button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: 0.3s;
+}
+
+.send-form button:hover {
+  background: #0056b3;
+}
+
 .transaction-history {
   list-style: none;
   padding-left: 0;
