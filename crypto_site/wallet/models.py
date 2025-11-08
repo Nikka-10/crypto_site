@@ -1,5 +1,6 @@
 from django.db import models
 from users.models import CustomUser
+from django.utils import timezone
 
 class Crypto(models.Model):
     name = models.CharField(max_length=150,  unique=True)
@@ -15,3 +16,12 @@ class Wallet(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     crypto = models.ForeignKey(Crypto, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=20, decimal_places=8, default=0)
+    
+    
+class History(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    operation = models.CharField(max_length=255)
+    crypto = models.ForeignKey(Crypto, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=20, decimal_places=8)
+    getter = models.ForeignKey(CustomUser, null=True, blank=True, on_delete=models.SET_NULL, related_name="received_history")
+    time_stamp = models.DateTimeField(default=timezone.now)

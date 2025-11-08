@@ -155,6 +155,7 @@ def transactions(request):
         user_wallet.save()
         getter_wallet.save()
     return redirect('wallet:wallet')
+
     
     
     
