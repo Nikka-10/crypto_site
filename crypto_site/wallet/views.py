@@ -5,6 +5,7 @@ from .models import Wallet, Crypto
 from decimal import Decimal
 from django.views.decorators.http import require_POST
 from .models import CustomUser
+from .models import History
 from django.db import transaction
 
 
@@ -13,12 +14,18 @@ def wallet(request):
     update_crypto_price()
     user_cryptos = Wallet.objects.filter(user=request.user)
     all_crypto = Crypto.objects.all()
+    history = History.objects.filter(user=request.user).order_by('-id')
     return render(request, 'wallet/wallet.html',{
         'user_cryptos': user_cryptos,
-        'all_crypto': all_crypto
+        'all_crypto': all_crypto,
+        'history': history
     })
+
+
+def add_history(user, operation, amount, crypto=None, converted_crypto=None, getter=None):
+    History.objects.create(user=user, operation = operation, crypto=crypto, converted_crypto=converted_crypto, amount = amount, getter=getter)
  
- 
+
 @require_POST
 def insert_money(request):
     deposit_amount = float(request.POST.get('deposit_amount', 0))
@@ -26,6 +33,7 @@ def insert_money(request):
         user = request.user
         user.balance += Decimal(deposit_amount)
         user.save()
+        add_history(user=user, operation = "insert", amount = Decimal(deposit_amount))
         return redirect('wallet:wallet')
     
     
@@ -36,6 +44,7 @@ def withdraw_money(request):
     if withdraw_amount > 0 and Decimal(withdraw_amount) <= user.balance:
         user.balance -= Decimal(withdraw_amount)
         user.save()
+        add_history(user=user, operation = "withdraw", amount = Decimal(withdraw_amount))
         return redirect('wallet:wallet')
     
     
@@ -53,6 +62,7 @@ def buy_crypto(request, name, amount):
             
             wallet, created = Wallet.objects.get_or_create(user=user, crypto=crypto)      
             wallet.amount += Decimal(amount)
+            add_history(user=user, operation="buy", amount=amount, crypto=crypto)
             wallet.save()    
             
     
@@ -73,6 +83,7 @@ def sell_crypto(request, name, amount):
             user.balance += money_amount
             wallet.save()
             user.save()
+            add_history(user=user, operation="sell", amount=amount, crypto=crypto)
 
     
 def convert_crypto(request, from_crypto, to_crypto, amount):
@@ -99,6 +110,7 @@ def convert_crypto(request, from_crypto, to_crypto, amount):
             wallet2.amount += Decimal(to_crypto_amount)
             wallet1.save()
             wallet2.save()
+            add_history(user=user, operation="convert", amount=amount, crypto=crypto1, converted_crypto=crypto2)
 
         
     
@@ -154,7 +166,9 @@ def transactions(request):
         getter_wallet.amount += amount
         user_wallet.save()
         getter_wallet.save()
+        add_history(user=user, operation="send", amount=amount, crypto=crypto, getter=getter)
     return redirect('wallet:wallet')
+
 
     
     

@@ -21,7 +21,8 @@ class Wallet(models.Model):
 class History(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     operation = models.CharField(max_length=255)
-    crypto = models.ForeignKey(Crypto, on_delete=models.CASCADE)
+    crypto = models.ForeignKey(Crypto, on_delete=models.CASCADE, null=True, blank=True)
+    converted_crypto = models.ForeignKey(Crypto, on_delete=models.SET_NULL, null=True, blank=True, related_name="concerted_crypto")
     amount = models.DecimalField(max_digits=20, decimal_places=8)
     getter = models.ForeignKey(CustomUser, null=True, blank=True, on_delete=models.SET_NULL, related_name="received_history")
     time_stamp = models.DateTimeField(default=timezone.now)

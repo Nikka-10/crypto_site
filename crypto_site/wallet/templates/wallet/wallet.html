@@ -146,7 +146,31 @@
 
     <section class="transactions-section">
       <h2>ოპერაციების ისტორია</h2>
-      <ul id="transaction-history" class="transaction-history"></ul>
+      <ul id="transaction-history" class="transaction-history">
+      {% for action in history %}
+
+        {% if action.operation == 'insert' %}
+          <li>{{ action.operation }} -- <p style='color: green; display: inline-block;'>{{action.amount}}</p></li>
+        {% endif %}
+
+        {% if action.operation == 'withdraw' %}
+          <li>{{ action.operation }} -- <p style='color: red; display: inline-block;'>{{action.amount}}</p></li>
+        {% endif %}
+
+        {% if action.operation == 'buy' or action.operation == 'sell' %}
+          <li>{{ action.operation }} -- {{action.crypto}} -- {{action.amount}}</li>
+        {% endif %}
+
+        {% if action.operation == 'convert' %}
+          <li>{{ action.operation }} -- {{action.crypto}} -- to -- {{action.converted_crypto}} -- {{action.amount}}</li>
+        {% endif %}
+
+        {% if action.operation == 'send' %}
+          <li>{{ action.operation }} -- {{action.crypto}} -- {{action.amount}} -- to ({{action.getter}})</li>
+        {% endif %}
+        
+      {% endfor %}
+      </ul>
     </section>
 
     <section class="chart-section">
