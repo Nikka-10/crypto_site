@@ -48,7 +48,7 @@
 
       <h2>კრიპტოვალუტების ბალანსი</h2>
       {% for wallet in user_cryptos  %}
-        <ul id="crypto-balances" class="crypto-balances">{{ wallet.crypto.name}} --- {{ wallet.crypto.symbol}} --- {{ wallet.amount}}</ul>
+        <ul id="crypto-balances" class="crypto-balances">{{ wallet.crypto.name}} ---- {{ wallet.crypto.symbol}} ---- {{ wallet.amount}}</ul>
       
       {% endfor %}
     </section>
@@ -150,23 +150,23 @@
       {% for action in history %}
 
         {% if action.operation == 'insert' %}
-          <li>{{ action.operation }} -- <p style='color: green; display: inline-block;'>{{action.amount}}</p></li>
+          <li>{{ action.operation }} --- <p style='color: green; display: inline-block;'>{{action.amount}} --- {{action.time_stamp}}</p></li>
         {% endif %}
 
         {% if action.operation == 'withdraw' %}
-          <li>{{ action.operation }} -- <p style='color: red; display: inline-block;'>{{action.amount}}</p></li>
+          <li>{{ action.operation }} --- <p style='color: red; display: inline-block;'>{{action.amount}} --- {{action.time_stamp}}</p></li>
         {% endif %}
 
         {% if action.operation == 'buy' or action.operation == 'sell' %}
-          <li>{{ action.operation }} -- {{action.crypto}} -- {{action.amount}}</li>
+          <li>{{ action.operation }} --- {{action.crypto}} --- {{action.amount}} --- {{action.time_stamp}}</li>
         {% endif %}
 
         {% if action.operation == 'convert' %}
-          <li>{{ action.operation }} -- {{action.crypto}} -- to -- {{action.converted_crypto}} -- {{action.amount}}</li>
+          <li>{{ action.operation }} --- {{action.crypto}} --- to --- {{action.converted_crypto}} --- {{action.amount}} --- {{action.time_stamp}}</li>
         {% endif %}
 
         {% if action.operation == 'send' %}
-          <li>{{ action.operation }} -- {{action.crypto}} -- {{action.amount}} -- to ({{action.getter}})</li>
+          <li>{{ action.operation }} --- {{action.crypto}} --- {{action.amount}} --- to --- {{action.getter}} --- {{action.time_stamp}}</li>
         {% endif %}
         
       {% endfor %}

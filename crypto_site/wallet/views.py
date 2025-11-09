@@ -168,14 +168,4 @@ def transactions(request):
         getter_wallet.save()
         add_history(user=user, operation="send", amount=amount, crypto=crypto, getter=getter)
     return redirect('wallet:wallet')
-
-
     
-    
-    
-    
-    
-
-    
-    
-        

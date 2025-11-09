@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="ka">
 <head>
   <meta charset="UTF-8" />
@@ -13,7 +14,7 @@
   <header>
     <div class="container">
       <a href="{% url "main:index" %}" class="logo">
-        <img src="https://gclnk.com/aLleVbxg" alt="khurmix Logo">
+        <img src="{% static 'main/images/012.png' %}" alt="khurmix Logo">
         <span>KhurmaX</span>
       </a>
       <nav>
