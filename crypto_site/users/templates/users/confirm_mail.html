@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'users/confirm_mail.css' %}">
+</head>
+<body>
+<form method="POST" action="{% url 'users:verify_2fa' %}">
+    {% csrf_token %}
+    <div class="code-container">
+        <input name="d1" maxlength="1" class="code-input" />
+        <input name="d2" maxlength="1" class="code-input" />
+        <input name="d3" maxlength="1" class="code-input" />
+        <input name="d4" maxlength="1" class="code-input" />
+    </div>
+    <button type="submit">Verify</button>
+</form>
+
+
+<script src="{% static 'users/confirm_mail.js' %}"></script>
+
+</body>
+</html>

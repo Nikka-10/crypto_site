@@ -6,18 +6,18 @@ def onetime_code():
     code = ""
     for _ in range(4):
         num = randint(0, 9)
-        code += num
+        code += str(num)
     
-    return int(code)
+    return code
 
 
-def send_email(Receiver):
+def send_email(Receiver, one_time_code):
     
-    sender = ""
+    sender = "" # gonna write later
     receiver = Receiver
-    password = ""
+    password = "" #gonna write later
     subject = "Khurmax, One-time code"
-    body = f"Here is your one-time code:\n {onetime_code()}"
+    body = f"Here is your one-time code:\n {one_time_code}"
 
     messege = f"""From: {sender}
     To: {receiver}

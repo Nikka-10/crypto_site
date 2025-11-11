@@ -24,6 +24,18 @@
       <label>ელ.ფოსტა</label>
       <div class="user-value">{{ user.email }}</div>
     </div>
+
+    <form method="POST" action="{% url 'users:toggle_2fa' %}">
+      {% csrf_token %}
+      <button type="submit">
+          {% if request.user.has_2FA %}
+              Disable 2FA
+          {% else %}
+              Enable 2FA
+          {% endif %}
+      </button>
+    </form>
+
   </div>
 
   <main>
