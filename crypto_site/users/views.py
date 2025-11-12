@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from .models import CustomUser
 from django.contrib.auth import login, logout, authenticate
 from wallet.utils import if_POST
@@ -14,15 +14,19 @@ def sign_up(request):
     password = request.POST['password']
     username = first_name +" "+ last_name
     
-    user = CustomUser.objects.create_user(
-        username = username, 
-        email = email, 
-        password = password,
-        first_name=first_name,
-        last_name=last_name 
-        )
-    user.save()
-    return redirect('users:login')
+    one_time_code = onetime_code()
+    send_email(email, one_time_code)
+    
+    request.session['signup_data'] = {
+    'username': username,
+    'email': email,
+    'password': password,
+    'first_name': first_name,
+    'last_name': last_name, 
+    'code': one_time_code
+        }
+    
+    return redirect('users:verify_2fa')
 
         
 @if_POST("users/login.html")
@@ -41,7 +45,7 @@ def log_in(request):
     
     if user_obj.has_2FA:
         one_time_code = onetime_code()
-        send_email(user_obj.email, one_time_code)
+        send_email(email, one_time_code)
         request.session['user_id'] = user_obj.id
         request.session['one_time_code'] = one_time_code
         return redirect("users:verify_2fa")
@@ -65,21 +69,32 @@ def toggle_2fa(request):
         
     user.save()
         
-
+        
 @if_POST('users/confirm_mail.html')
 def verify_2fa(request):
-    insered_code = "".join([request.POST[f'd{i}'] for i in range(1, 5)])
+    entered_code = "".join([request.POST[f'd{i}'] for i in range(1, 5)])
+
     user_id = request.session.get('user_id')
     one_time_code = request.session.get('one_time_code')
-    
-    if insered_code == one_time_code:
+    signup_data = request.session.get('signup_data')
+
+    if user_id and entered_code == one_time_code:
         user = CustomUser.objects.get(id=user_id)
         login(request, user)
-        
+
         del request.session['user_id']
         del request.session['one_time_code']
-        
+
         return redirect("wallet:wallet")
-    
+
+    elif signup_data and entered_code == signup_data['code']:
+        CustomUser.objects.create_user(
+            username=signup_data['username'],
+            email=signup_data['email'],
+            password=signup_data['password']
+        )
+
+        del request.session['signup_data']
+        return redirect("users:login")
+
     return redirect("users:login")
-        

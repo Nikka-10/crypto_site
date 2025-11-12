@@ -15,7 +15,7 @@ def send_email(Receiver, one_time_code):
     
     sender = "" # gonna write later
     receiver = Receiver
-    password = "" #gonna write later
+    password = ""#gonna write later
     subject = "Khurmax, One-time code"
     body = f"Here is your one-time code:\n {one_time_code}"
 
