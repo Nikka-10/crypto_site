@@ -181,6 +181,10 @@
           <li>{{ action.operation }} --- {{action.crypto}} --- {{action.amount}} --- to --- {{action.getter}} --- {{action.time_stamp}}</li>
         {% endif %}
         
+        {% if action.operation == 'get' %}
+          <li>{{ action.operation }} --- {{action.crypto}} --- {{action.amount}} --- from --- {{action.getter}} --- {{action.time_stamp}}</li>
+        {% endif %}
+
       {% endfor %}
       </ul>
     </section>

@@ -1,4 +1,4 @@
-from django.shortcuts import redirect
+from django.shortcuts import render, redirect
 from .models import CustomUser
 from django.contrib.auth import login, logout, authenticate
 from wallet.utils import if_POST
@@ -36,12 +36,17 @@ def log_in(request):
 
     try:
         user_obj = CustomUser.objects.get(email=email)
-        user = authenticate(request, username=user_obj.username, password=password)
     except CustomUser.DoesNotExist:
-        user = None
+        return render(request, "users/login.html", {
+            "error": "email or password is incorrect"
+        })
+        
+    user = authenticate(request, username=user_obj.username, password=password)
     
-    if  not user:
-        return redirect("users:sign_up")
+    if not user:
+        return render(request, "users/login.html", {
+            "error": "email or password is incorrect"
+        })      
     
     if user_obj.has_2FA:
         one_time_code = onetime_code()
@@ -69,7 +74,6 @@ def toggle_2fa(request):
         
     user.save()
         
-        
 @if_POST('users/confirm_mail.html')
 def verify_2fa(request):
     entered_code = "".join([request.POST[f'd{i}'] for i in range(1, 5)])
@@ -78,7 +82,11 @@ def verify_2fa(request):
     one_time_code = request.session.get('one_time_code')
     signup_data = request.session.get('signup_data')
 
-    if user_id and entered_code == one_time_code:
+    if user_id:
+        if not entered_code == one_time_code:
+            return render(request, "verify-2fa", {
+                "error": "code is incorrect"
+            })
         user = CustomUser.objects.get(id=user_id)
         login(request, user)
 
@@ -87,7 +95,11 @@ def verify_2fa(request):
 
         return redirect("wallet:wallet")
 
-    elif signup_data and entered_code == signup_data['code']:
+    elif signup_data:
+        if not entered_code == signup_data['code']:
+            return render(request, "users/verify-2fa", {
+                "error": "code is incorrect"
+            })
         CustomUser.objects.create_user(
             username=signup_data['username'],
             email=signup_data['email'],

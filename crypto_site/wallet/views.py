@@ -12,6 +12,7 @@ from django.db import transaction
 @login_required(login_url='/login/')
 def wallet(request):
     update_crypto_price()
+    
     user_cryptos = Wallet.objects.filter(user=request.user)
     all_crypto = Crypto.objects.all()
     history = History.objects.filter(user=request.user).order_by('-id')
@@ -35,18 +36,31 @@ def insert_money(request):
         user.save()
         add_history(user=user, operation = "insert", amount = Decimal(deposit_amount))
         return redirect('wallet:wallet')
+    return render(request, 'wallet/wallet.html', {
+        "error": "Amount must be positive"
+    })
     
     
 @require_POST
 def withdraw_money(request):
     withdraw_amount = float(request.POST.get('withdraw_amount', 0))
     user = request.user
-    if withdraw_amount > 0 and Decimal(withdraw_amount) <= user.balance:
-        user.balance -= Decimal(withdraw_amount)
-        user.save()
-        add_history(user=user, operation = "withdraw", amount = Decimal(withdraw_amount))
-        return redirect('wallet:wallet')
     
+    if not withdraw_amount > 0:
+        return render(request, "wallet/wallet.html", {
+            "error": "amount must be positive number"
+        })
+        
+    if not Decimal(withdraw_amount) <= user.balance:
+        return render(request, "wallet/wallet.html", {
+            "error": "not enought balance"
+        })
+        
+    user.balance -= Decimal(withdraw_amount)
+    user.save()
+    add_history(user=user, operation = "withdraw", amount = Decimal(withdraw_amount))
+    return redirect('wallet:wallet')
+
     
 def buy_crypto(request, name, amount): 
     user = request.user
@@ -63,7 +77,15 @@ def buy_crypto(request, name, amount):
             wallet, created = Wallet.objects.get_or_create(user=user, crypto=crypto)      
             wallet.amount += Decimal(amount)
             add_history(user=user, operation="buy", amount=amount, crypto=crypto)
-            wallet.save()    
+            wallet.save()
+            
+        return render(request, "wallet/wallet.html", {
+            "error": "not enought balance"
+        })
+        
+    return render(request, "wallet/wallet.html", {
+        "error": "write amount of crypto currency you want to buy"
+    })        
             
     
     
@@ -76,7 +98,9 @@ def sell_crypto(request, name, amount):
         try:
             wallet = Wallet.objects.get(user=user, crypto=crypto)
         except Wallet.DoesNotExist:
-            return
+            return render(request, "wallet/wallet.html", {
+                "error": "guess crypto is not correct? idk not sure"
+            })            
         
         if wallet.amount >= Decimal(amount):
             wallet.amount -= Decimal(amount)
@@ -84,6 +108,14 @@ def sell_crypto(request, name, amount):
             wallet.save()
             user.save()
             add_history(user=user, operation="sell", amount=amount, crypto=crypto)
+            
+        return render(request, "wallet/wallet.html", {
+            "error": "not enought amount of crypto currency"
+        })
+            
+    return render(request, "wallet/wallet.html", {
+        "error": "write amount of crypto currency you want to sell"
+    })
 
     
 def convert_crypto(request, from_crypto, to_crypto, amount):
@@ -103,7 +135,9 @@ def convert_crypto(request, from_crypto, to_crypto, amount):
             wallet1 = Wallet.objects.get(user=user, crypto=crypto1)
             wallet2, created = Wallet.objects.get_or_create(user=user, crypto=crypto2, defaults={'amount': 0})
         except Wallet.DoesNotExist:
-            return
+            return render(request, "wallet/wallet.html", {
+                "error":"not sure if i need this checking"
+            })
         
         if wallet1.amount >= Decimal(amount):
             wallet1.amount -= Decimal(amount)
@@ -111,6 +145,14 @@ def convert_crypto(request, from_crypto, to_crypto, amount):
             wallet1.save()
             wallet2.save()
             add_history(user=user, operation="convert", amount=amount, crypto=crypto1, converted_crypto=crypto2)
+            
+        return render(request, "wallet/wallet.html", {
+            "error": "not enought amount of crypto currency"
+        })
+            
+    return render(request, "wallet/wallet.html", {
+        "error": "write amount of crypto currency you want to convert"
+    })
 
         
     
@@ -136,6 +178,10 @@ def trade(request):
         amount = request.POST.get('convert-amount', 0)
         
         convert_crypto(request, from_crypto, to_crypto, amount)
+    else:
+        return render(request, "wallet/wallet.html", {
+            "error": "insert valid operation(well actually you cant inser inavlid but just in case)"
+        })
     
     return redirect('wallet:wallet')
 
@@ -145,12 +191,15 @@ def trade(request):
 def transactions(request):
     user = request.user
     getter_email = request.POST.get('email')
+    getter = CustomUser.objects.get(email=getter_email)
     crypto = Crypto.objects.get(name=request.POST.get('crypto_name'))
     
     try:
         getter = CustomUser.objects.get(email=getter_email)
     except CustomUser.DoesNotExist:
-        return 'error: Receiver not found'
+        return render(request, "wallet.wallet.html", {
+            "error": 'error: Receiver not found'
+            }) 
 
     crypto = Crypto.objects.get(name=request.POST.get('crypto_name'))
 
@@ -158,14 +207,28 @@ def transactions(request):
         user_wallet = Wallet.objects.get(user=user, crypto=crypto)
         getter_wallet, _ = Wallet.objects.get_or_create(user=getter, crypto=crypto)
     except Wallet.DoesNotExist:
-        return 'error: You dont own this crypto'
+        return render(request, "wallet.wallet.html", {
+            "error": 'error: You dont own this crypto'
+            })
     
     amount = Decimal(request.POST.get('amount'))
-    if amount > 0 and user_wallet.amount >= amount:
-        user_wallet.amount -= amount
-        getter_wallet.amount += amount
-        user_wallet.save()
-        getter_wallet.save()
-        add_history(user=user, operation="send", amount=amount, crypto=crypto, getter=getter)
+    
+    if not amount > 0:
+        return render(request, "wallet/wallet.html", {
+            "error": "amount must be positive number"
+        })
+        
+    if not user_wallet.amount >= amount:
+        return render(request, "wallet/wallet.html", {
+            "error": "not enought amount of crypto currency"
+        })
+        
+    user_wallet.amount -= amount
+    getter_wallet.amount += amount
+    user_wallet.save()
+    getter_wallet.save()
+    add_history(user=user, operation="send", amount=amount, crypto=crypto, getter=getter)
+    add_history(user=getter, operation="get", amount=amount, crypto=crypto, getter=user)
+    
     return redirect('wallet:wallet')
     

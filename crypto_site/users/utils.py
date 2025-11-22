@@ -15,7 +15,7 @@ def send_email(Receiver, one_time_code):
     
     sender = "" # gonna write later
     receiver = Receiver
-    password = ""#gonna write later
+    password = "" # gonna write later
     subject = "Khurmax, One-time code"
     body = f"Here is your one-time code:\n {one_time_code}"
 
@@ -24,11 +24,13 @@ def send_email(Receiver, one_time_code):
     Subject: {subject}\n
     {body} 
     """
-
-    with smtplib.SMTP("smtp.gmail.com", 587) as server:
-        server.starttls()
-        server.login(sender, password)
-        server.sendmail(sender, receiver, messege)
+    try:
+        with smtplib.SMTP("smtp.gmail.com", 587) as server:
+            server.starttls()
+            server.login(sender, password)
+            server.sendmail(sender, receiver, messege)
+    except:
+        print("guess problem is that you forget to write mail from where messeg will be sent bro XDD")
     
 
    
