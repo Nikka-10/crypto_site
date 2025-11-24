@@ -10,6 +10,9 @@
 <body>
 <form method="POST" action="{% url 'users:verify_2fa' %}">
     {% csrf_token %}
+        {% if error %}
+          <p style="color:red">{{ error }}</p>
+        {% endif %}
     <div class="code-container">
         <input name="d1" maxlength="1" class="code-input" />
         <input name="d2" maxlength="1" class="code-input" />

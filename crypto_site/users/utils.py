@@ -30,7 +30,7 @@ def send_email(Receiver, one_time_code):
             server.login(sender, password)
             server.sendmail(sender, receiver, messege)
     except:
-        print("guess problem is that you forget to write mail from where messeg will be sent bro XDD")
+        print("you forget to write your own mail")
     
 
    

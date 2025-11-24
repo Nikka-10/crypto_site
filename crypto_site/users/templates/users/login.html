@@ -13,6 +13,9 @@
       <h2>შესვლა</h2>
       <form class="register-form" method='POST'>
         {% csrf_token %}
+        {% if error %}
+          <p style="color:red">{{ error }}</p>
+        {% endif %}
         <input 
           type="email" 
           name="email"
