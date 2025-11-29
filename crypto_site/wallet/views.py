@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .utils import update_crypto_price
 from .models import Wallet, Crypto
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 from django.views.decorators.http import require_POST
 from .models import CustomUser
 from .models import History
@@ -32,19 +32,31 @@ def add_history(user, operation, amount, crypto=None, converted_crypto=None, get
 
 @require_POST
 def insert_money(request):
-    deposit_amount = float(request.POST.get('deposit_amount', 0))
-    if not deposit_amount <=0:
-        user = request.user
-        user.balance += Decimal(deposit_amount)
-        user.save()
-        add_history(user=user, operation = "insert", amount = Decimal(deposit_amount))
-        return redirect('wallet:wallet')
-    return render_wallet(request,"insert_error", "Amount must be positive" )
+    raw_amount = request.POST.get('deposit_amount')
+    max_balance = Decimal('999999999999999999.99')
+    user = request.user
+    
+    try:
+        deposit_amount = Decimal(raw_amount)
+    except (InvalidOperation, TypeError):
+        return render_wallet(request, "Invalid amount entered")
+    
+    if user.balance + deposit_amount > max_balance:
+        return render_wallet(request, "insert_error", "let's be honest, you don't have that much money" )
+    
+    if deposit_amount <=0:
+        return render_wallet(request, "insert_error", "Amount must be positive" )
+    
+    user = request.user
+    user.balance += Decimal(deposit_amount)
+    user.save()
+    add_history(user=user, operation = "insert", amount = Decimal(deposit_amount))
+    return redirect('wallet:wallet')
     
     
 @require_POST
 def withdraw_money(request):
-    withdraw_amount = float(request.POST.get('withdraw_amount', 0))
+    withdraw_amount = Decimal(request.POST.get('withdraw_amount', 0))
     user = request.user
     
     if not withdraw_amount > 0:
@@ -115,7 +127,7 @@ def convert_crypto(request, from_crypto, to_crypto, amount):
     
     if amount != '':
         total_money = Decimal(price1) * Decimal(amount)
-        to_crypto_amount = float(total_money / price2)
+        to_crypto_amount = Decimal(total_money / price2)
         
         
         try:

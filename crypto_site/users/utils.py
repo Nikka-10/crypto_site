@@ -13,9 +13,9 @@ def onetime_code():
 
 def send_email(Receiver, one_time_code):
     
-    sender = "" # gonna write later
+    sender = "nikoloz.gvasalia@gau.edu.ge" # gonna write later
     receiver = Receiver
-    password = "" # gonna write later
+    password = "tsst hieg naka amox" # gonna write later
     subject = "Khurmax, One-time code"
     body = f"Here is your one-time code:\n {one_time_code}"
 

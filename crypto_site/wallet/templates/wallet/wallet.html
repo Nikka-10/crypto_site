@@ -82,8 +82,8 @@
       <button type="button" class="trade-btn" data-target="convert">კონვერტაცია</button>
     </div>
     
-    {% if error %}
-      <p style="color:red">{{ error }}</p>
+    {% if trade_error %}
+      <p style="color:red">{{ trade_error }}</p>
     {% endif %}
     <div class="trade-panels">
       <div id="buy" class="trade-panel active">
