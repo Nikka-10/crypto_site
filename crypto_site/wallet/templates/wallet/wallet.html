@@ -173,11 +173,11 @@
       {% for action in history %}
 
         {% if action.operation == 'insert' %}
-          <li>{{ action.operation }} --- <p style='color: green; display: inline-block;'>{{action.amount}} --- {{action.time_stamp}}</p></li>
+          <li>{{ action.operation }} --- <p style='color: green; display: inline-block;'>{{action.amount}} $ --- {{action.time_stamp}}</p></li>
         {% endif %}
 
         {% if action.operation == 'withdraw' %}
-          <li>{{ action.operation }} --- <p style='color: red; display: inline-block;'>{{action.amount}} --- {{action.time_stamp}}</p></li>
+          <li>{{ action.operation }} --- <p style='color: red; display: inline-block;'>{{action.amount}} $ --- {{action.time_stamp}}</p></li>
         {% endif %}
 
         {% if action.operation == 'buy' or action.operation == 'sell' %}

@@ -91,9 +91,9 @@ def buy_crypto(request, name, amount):
     wallet.amount += Decimal(amount)
     add_history(user=user, operation="buy", amount=amount, crypto=crypto)
     wallet.save()
+    return redirect('wallet:wallet')
             
-    
-    
+      
 def sell_crypto(request, name, amount):
     user = request.user
     crypto = Crypto.objects.get(name=name)
@@ -111,6 +111,7 @@ def sell_crypto(request, name, amount):
             wallet.save()
             user.save()
             add_history(user=user, operation="sell", amount=amount, crypto=crypto)
+            return redirect('wallet:wallet')
             
         return render_wallet(request,"trade_error", "not enought amount of crypto currency")
             
@@ -142,6 +143,7 @@ def convert_crypto(request, from_crypto, to_crypto, amount):
             wallet1.save()
             wallet2.save()
             add_history(user=user, operation="convert", amount=amount, crypto=crypto1, converted_crypto=crypto2)
+            return redirect('wallet:wallet')
             
         return render_wallet(request,"trade_error", "not enought amount of crypto currency")
             

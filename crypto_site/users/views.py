@@ -84,7 +84,7 @@ def verify_2fa(request):
 
     if user_id:
         if not entered_code == one_time_code:
-            return render(request, "verify-2fa", {
+            return render(request, "users/confirm_mail.html", {
                 "error": "code is incorrect"
             })
         user = CustomUser.objects.get(id=user_id)

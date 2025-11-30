@@ -1,6 +1,9 @@
 from random import randint
 import smtplib
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 
 def onetime_code():
     code = ""
@@ -13,14 +16,14 @@ def onetime_code():
 
 def send_email(Receiver, one_time_code):
     
-    sender = "nikoloz.gvasalia@gau.edu.ge" # gonna write later
+    sender = os.getenv("code_sender_email")
     receiver = Receiver
-    password = "tsst hieg naka amox" # gonna write later
+    password = os.getenv("app_password")
     subject = "Khurmax, One-time code"
     body = f"Here is your one-time code:\n {one_time_code}"
 
     messege = f"""From: {sender}
-    To: {receiver}
+    To: {receiver}pyth
     Subject: {subject}\n
     {body} 
     """
