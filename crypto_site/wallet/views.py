@@ -41,7 +41,7 @@ def insert_money(request):
     except (InvalidOperation, TypeError):
         return render_wallet(request, "Invalid amount entered")
     
-    if user.balance + deposit_amount > max_balance:
+    if user.balance + deposit_amount > max_balance or deposit_amount > max_balance:
         return render_wallet(request, "insert_error", "let's be honest, you don't have that much money" )
     
     if deposit_amount <=0:
@@ -74,10 +74,12 @@ def withdraw_money(request):
 def buy_crypto(request, name, amount): 
     user = request.user
     crypto = Crypto.objects.get(name=name)
+    max_crypot_amount = Decimal('999999999999999.99999999')
     
     price_unit = crypto.price_usd
     if amount == '':
         return render_wallet(request,"trade_error", "write amount of crypto currency you want to buy")
+    
                
     total_amount = Decimal(price_unit) * Decimal(amount)
     
@@ -88,6 +90,10 @@ def buy_crypto(request, name, amount):
     user.save()
     
     wallet, created = Wallet.objects.get_or_create(user=user, crypto=crypto)      
+    
+    if wallet.amount + Decimal(amount) > max_crypot_amount or Decimal(amount) > max_crypot_amount:
+        return render_wallet(request, "insert_error", "chill bro, even we don't have that much crypto" )
+    
     wallet.amount += Decimal(amount)
     add_history(user=user, operation="buy", amount=amount, crypto=crypto)
     wallet.save()
@@ -198,6 +204,9 @@ def transactions(request):
         return render_wallet(request, "tarnsaction_error", "you dont own this crypto")
     
     getter_wallet, _ = Wallet.objects.get_or_create(user=getter, crypto=crypto)
+    
+    if user.email == getter_email:
+        return render_wallet(request, "tarnsaction_error", "you can't send crypto currency to yourself")
     
     if not getter_wallet:
         return render_wallet(request, "tarnsaction_error", "you dont own this crypto")
