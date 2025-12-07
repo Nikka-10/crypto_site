@@ -8,5 +8,5 @@ urlpatterns = [
     path('login/', views.log_in, name="login"),
     path('logout/', views.log_out, name="logout"),
     path('verify-2fa', views.verify_2fa, name='verify_2fa'),
-    path('toggle_2fa', views.toggle_2fa, name='toggle_2fa')
+    path('toggle_2fa', views.toggle_2fa, name='toggle_2fa'),
 ]
