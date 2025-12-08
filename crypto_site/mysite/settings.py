@@ -68,23 +68,17 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+SITE_ID = 1
+
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
-        # For each OAuth based provider, either add a ``SocialApp``
-        # (``socialaccount`` app) containing the required client
-        # credentials, or list them here:
         'APP': {
             'client_id': os.getenv("client_id"),
             'secret': os.getenv("client_secret"),
             'key': ''
         },
-        'SCOPE': [
-            'khurma 1',
-            os.getenv("code_sender_email"),
-    ],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
-        }
+        'SCOPE': ["email", "profile"],
+        "AUTH_PARAMS": {"access_type": "online"}
     }
 }
 
@@ -112,9 +106,6 @@ AUTHENTICATION_BACKENDS = [
     # `allauth` specific authentication methods, such as login by email
     'allauth.account.auth_backends.AuthenticationBackend'
 ]
-
-
-
 
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
