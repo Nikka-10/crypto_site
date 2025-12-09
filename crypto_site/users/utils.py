@@ -1,9 +1,13 @@
 from random import randint
 import smtplib
 from dotenv import load_dotenv
+from pathlib import Path
 import os
 
-load_dotenv()
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+load_dotenv(BASE_DIR / ".env")
 
 def onetime_code():
     code = ""
